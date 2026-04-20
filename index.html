@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Genius Tech - Ticketing System</title>
+    <title>Genius IT Solutions - Portal Systems</title>
     <link rel="icon" type="image/svg+xml" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'%3E%3Cdefs%3E%3ClinearGradient id='grad' x1='0%25' y1='0%25' x2='100%25' y2='100%25'%3E%3Cstop offset='0%25' style='stop-color:%231a6fa1;stop-opacity:1' /%3E%3Cstop offset='100%25' style='stop-color:%232d8cc8;stop-opacity:1' /%3E%3C/linearGradient%3E%3C/defs%3E%3Cpath d='M20,20 Q20,10 30,10 L70,10 Q80,10 80,20 L80,30 Q90,30 90,40 L90,70 Q90,80 80,80 L30,80 Q20,80 20,70 Z' fill='url(%23grad)'/%3E%3Cpath d='M35,35 L65,35 L65,50 L50,50 L50,65 L35,65 Z' fill='white' opacity='0.9'/%3E%3C/svg%3E">
     <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
     <script src="https://unpkg.com/react@18/umd/react.production.min.js"></script>
@@ -254,28 +254,6 @@
         @media (max-width: 480px) {
             .stats-grid {
                 grid-template-columns: 1fr !important;
-            }
-
-            .login-card-enhanced {
-                padding: 22px !important;
-            }
-
-            .login-logo-wrap {
-                width: 116px;
-                height: 116px;
-                border-radius: 22px;
-            }
-
-            .page-title {
-                font-size: 18px !important;
-            }
-
-            .topbar {
-                min-height: 72px;
-            }
-
-            .topbar-actions .btn span {
-                display: none;
             }
         }
         
@@ -800,19 +778,393 @@
             justify-content: center;
             min-height: 100vh;
             width: 100vw;
-            padding: 20px;
-            background: var(--bg-primary);
-        }
-        
-        .login-card {
-            background: var(--bg-secondary);
-            border: 1px solid var(--border-color);
-            border-radius: 20px;
-            padding: 48px;
-            width: 100%;
-            max-width: 450px;
+            padding: 28px;
+            background:
+                radial-gradient(circle at 12% 88%, rgba(45, 140, 200, 0.26), transparent 24%),
+                radial-gradient(circle at 88% 18%, rgba(26, 111, 161, 0.16), transparent 22%),
+                linear-gradient(135deg, #f3f8fd 0%, #edf4fb 42%, #d9e8f6 100%);
+            overflow: auto;
         }
 
+        .login-shell {
+            width: 100%;
+            max-width: 1180px;
+            min-height: 680px;
+            display: grid;
+            grid-template-columns: 1.15fr 0.85fr;
+            background: rgba(255,255,255,0.78);
+            border: 1px solid rgba(26, 111, 161, 0.14);
+            border-radius: 32px;
+            overflow: hidden;
+            box-shadow: 0 28px 80px rgba(13, 85, 128, 0.16);
+            backdrop-filter: blur(14px);
+        }
+
+        .login-panel-brand {
+            position: relative;
+            padding: 56px 56px 42px;
+            background:
+                linear-gradient(180deg, rgba(255,255,255,0.5), rgba(255,255,255,0.14)),
+                linear-gradient(135deg, #f7fbff 0%, #ebf4fb 54%, #d8e7f4 100%);
+            display: flex;
+            flex-direction: column;
+            justify-content: space-between;
+            overflow: hidden;
+        }
+
+        .login-panel-brand::before {
+            content: '';
+            position: absolute;
+            inset: auto -12% -24% -12%;
+            height: 300px;
+            background:
+                radial-gradient(circle at 16% 50%, rgba(45, 140, 200, 0.22), transparent 22%),
+                radial-gradient(circle at 68% 68%, rgba(26, 111, 161, 0.12), transparent 24%),
+                linear-gradient(180deg, rgba(255,255,255,0), rgba(255,255,255,0.15));
+            pointer-events: none;
+        }
+
+        .login-panel-brand::after {
+            content: '';
+            position: absolute;
+            left: -10%;
+            right: -10%;
+            bottom: 80px;
+            height: 180px;
+            background:
+                radial-gradient(circle at 10% 70%, rgba(255,255,255,0.55), transparent 12%),
+                radial-gradient(circle at 22% 68%, rgba(255,255,255,0.45), transparent 10%),
+                radial-gradient(circle at 36% 74%, rgba(255,255,255,0.38), transparent 12%),
+                linear-gradient(180deg, rgba(255,255,255,0), rgba(45, 140, 200, 0.12));
+            filter: blur(0.5px);
+            pointer-events: none;
+        }
+
+        .login-brand-top {
+            position: relative;
+            z-index: 1;
+        }
+
+        .login-brand-logo {
+            width: 260px;
+            max-width: 100%;
+            display: block;
+            margin-bottom: 22px;
+            filter: drop-shadow(0 10px 24px rgba(13, 85, 128, 0.12));
+        }
+
+        .login-brand-badge {
+            display: inline-flex;
+            align-items: center;
+            gap: 10px;
+            padding: 10px 18px;
+            border-radius: 999px;
+            background: rgba(255, 255, 255, 0.72);
+            border: 1px solid rgba(26, 111, 161, 0.1);
+            color: var(--logo-blue);
+            font-size: 12px;
+            font-weight: 800;
+            letter-spacing: 0.22em;
+            text-transform: uppercase;
+            margin-bottom: 28px;
+            box-shadow: 0 12px 24px rgba(13, 85, 128, 0.08);
+        }
+
+        .login-brand-title {
+            position: relative;
+            z-index: 1;
+            font-size: clamp(36px, 4vw, 62px);
+            line-height: 1.02;
+            letter-spacing: -0.04em;
+            max-width: 560px;
+            color: #102542;
+            margin-bottom: 24px;
+            font-weight: 800;
+        }
+
+        .login-brand-title span {
+            color: var(--logo-blue);
+        }
+
+        .login-brand-copy {
+            position: relative;
+            z-index: 1;
+            max-width: 580px;
+            font-size: 24px;
+            line-height: 1.45;
+            color: #274766;
+            margin-bottom: 18px;
+        }
+
+        .login-brand-copy.secondary {
+            font-size: 22px;
+            margin-bottom: 0;
+        }
+
+        .login-trust-card {
+            position: relative;
+            z-index: 1;
+            margin-top: 40px;
+            max-width: 560px;
+            background: rgba(255,255,255,0.82);
+            border: 1px solid rgba(26, 111, 161, 0.1);
+            box-shadow: 0 18px 40px rgba(13, 85, 128, 0.09);
+            border-radius: 28px;
+            padding: 28px 30px;
+        }
+
+        .login-trust-title {
+            font-size: 28px;
+            font-weight: 800;
+            color: #102542;
+            margin-bottom: 12px;
+            letter-spacing: -0.03em;
+        }
+
+        .login-trust-copy {
+            font-size: 18px;
+            line-height: 1.55;
+            color: #425d78;
+        }
+
+        .login-panel-form {
+            padding: 56px 54px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            background: linear-gradient(180deg, rgba(255,255,255,0.96), rgba(248,251,255,0.92));
+        }
+
+        .login-card {
+            width: 100%;
+            max-width: 420px;
+        }
+
+        .login-card-header {
+            margin-bottom: 30px;
+        }
+
+        .login-card-logo {
+            width: 210px;
+            max-width: 100%;
+            display: block;
+            margin-bottom: 24px;
+        }
+
+        .login-card-kicker {
+            display: inline-block;
+            color: var(--logo-blue);
+            font-size: 12px;
+            font-weight: 800;
+            letter-spacing: 0.24em;
+            text-transform: uppercase;
+            margin-bottom: 12px;
+        }
+
+        .login-card-title {
+            font-size: clamp(34px, 3.5vw, 50px);
+            line-height: 1.05;
+            letter-spacing: -0.04em;
+            color: #102542;
+            margin-bottom: 12px;
+            font-weight: 800;
+        }
+
+        .login-card-subtitle {
+            font-size: 18px;
+            line-height: 1.6;
+            color: #6c7f93;
+        }
+
+        .login-form-group {
+            margin-bottom: 18px;
+        }
+
+        .login-form-label {
+            display: block;
+            font-size: 15px;
+            font-weight: 700;
+            color: #29435c;
+            margin-bottom: 10px;
+        }
+
+        .login-input-wrap {
+            display: flex;
+            align-items: center;
+            gap: 14px;
+            background: rgba(255,255,255,0.92);
+            border: 1px solid rgba(26, 111, 161, 0.14);
+            border-radius: 18px;
+            padding: 0 18px;
+            min-height: 70px;
+            box-shadow: inset 0 1px 0 rgba(255,255,255,0.6);
+            transition: all 0.2s ease;
+        }
+
+        .login-input-wrap:focus-within {
+            border-color: rgba(26, 111, 161, 0.45);
+            box-shadow: 0 0 0 4px rgba(45, 140, 200, 0.12);
+        }
+
+        .login-input-icon {
+            width: 22px;
+            text-align: center;
+            color: #7a91aa;
+            font-size: 18px;
+            flex-shrink: 0;
+        }
+
+        .login-input-wrap input {
+            border: none !important;
+            background: transparent !important;
+            color: #102542 !important;
+            font-size: 20px;
+            padding: 0 !important;
+            min-height: auto !important;
+            box-shadow: none !important;
+        }
+
+        .login-input-wrap input::placeholder {
+            color: #97a7b8;
+        }
+
+        .login-submit {
+            width: 100%;
+            min-height: 68px;
+            margin-top: 8px;
+            border: none;
+            border-radius: 18px;
+            background: linear-gradient(135deg, #1d79b7 0%, #2892d3 55%, #1a6fa1 100%);
+            color: #fff;
+            font-size: 26px;
+            font-weight: 800;
+            letter-spacing: -0.02em;
+            box-shadow: 0 18px 36px rgba(26, 111, 161, 0.25);
+            cursor: pointer;
+            transition: transform 0.2s ease, box-shadow 0.2s ease;
+        }
+
+        .login-submit:hover {
+            transform: translateY(-1px);
+            box-shadow: 0 20px 40px rgba(26, 111, 161, 0.3);
+        }
+
+        .login-submit:active {
+            transform: translateY(0);
+        }
+
+        .login-footer-note {
+            margin-top: 18px;
+            text-align: center;
+            color: #7a8ea3;
+            font-size: 14px;
+        }
+
+        @media (max-width: 980px) {
+            .login-shell {
+                grid-template-columns: 1fr;
+                max-width: 760px;
+            }
+
+            .login-panel-brand {
+                min-height: 0;
+                padding: 42px 32px 26px;
+            }
+
+            .login-panel-form {
+                padding: 34px 32px 40px;
+            }
+
+            .login-brand-title {
+                max-width: 100%;
+            }
+
+            .login-brand-copy {
+                font-size: 20px;
+            }
+
+            .login-brand-copy.secondary {
+                font-size: 19px;
+            }
+
+            .login-trust-card {
+                margin-top: 28px;
+            }
+        }
+
+        @media (max-width: 640px) {
+            .login-screen {
+                padding: 14px;
+                align-items: stretch;
+            }
+
+            .login-shell {
+                min-height: auto;
+                border-radius: 24px;
+            }
+
+            .login-panel-brand,
+            .login-panel-form {
+                padding: 28px 20px;
+            }
+
+            .login-brand-logo,
+            .login-card-logo {
+                width: 180px;
+            }
+
+            .login-brand-badge {
+                font-size: 10px;
+                letter-spacing: 0.16em;
+                padding: 9px 14px;
+                margin-bottom: 20px;
+            }
+
+            .login-brand-title {
+                font-size: 44px;
+                margin-bottom: 18px;
+            }
+
+            .login-brand-copy,
+            .login-brand-copy.secondary {
+                font-size: 18px;
+                line-height: 1.5;
+            }
+
+            .login-trust-card {
+                padding: 22px 20px;
+                border-radius: 22px;
+            }
+
+            .login-trust-title {
+                font-size: 22px;
+            }
+
+            .login-trust-copy,
+            .login-card-subtitle {
+                font-size: 16px;
+            }
+
+            .login-card-title {
+                font-size: 42px;
+            }
+
+            .login-input-wrap {
+                min-height: 62px;
+                border-radius: 16px;
+                padding: 0 16px;
+            }
+
+            .login-input-wrap input {
+                font-size: 18px;
+            }
+
+            .login-submit {
+                min-height: 62px;
+                font-size: 22px;
+                border-radius: 16px;
+            }
+        }
 
         .error-message {
             background: rgba(255, 139, 148, 0.1);
@@ -901,71 +1253,6 @@
             white-space: nowrap;
         }
 
-
-        .login-card-enhanced {
-            max-width: 520px;
-            padding: 40px;
-            box-shadow: 0 24px 80px rgba(7, 28, 49, 0.22);
-            backdrop-filter: blur(12px);
-        }
-
-        .login-brand {
-            text-align: center;
-            margin-bottom: 32px;
-        }
-
-        .login-logo-wrap {
-            width: 140px;
-            height: 140px;
-            margin: 0 auto 20px;
-            padding: 18px;
-            border-radius: 28px;
-            background: linear-gradient(135deg, rgba(26, 111, 161, 0.16), rgba(45, 140, 200, 0.08));
-            border: 1px solid rgba(45, 140, 200, 0.2);
-            display: flex;
-            align-items: center;
-            justify-content: center;
-        }
-
-        .login-logo-image {
-            width: 100%;
-            height: auto;
-            object-fit: contain;
-        }
-
-        .login-eyebrow {
-            font-size: 12px;
-            letter-spacing: 0.18em;
-            text-transform: uppercase;
-            color: var(--logo-blue-light);
-            font-weight: 700;
-            margin-bottom: 12px;
-        }
-
-        .login-title {
-            font-size: clamp(34px, 5vw, 48px);
-            font-weight: 800;
-            color: var(--text-primary);
-            line-height: 1.05;
-            margin-bottom: 10px;
-        }
-
-        .login-subtitle {
-            font-size: 15px;
-            color: var(--text-secondary);
-            line-height: 1.6;
-            max-width: 360px;
-            margin: 0 auto;
-        }
-
-        .login-submit-btn {
-            width: 100%;
-            margin-top: 12px;
-            padding: 18px;
-            font-size: 18px;
-            justify-content: center;
-        }
-
         .connection-status {
             position: fixed;
             bottom: 20px;
@@ -996,7 +1283,7 @@
         }
     </style>
 </head>
-<body class="light">
+<body class="dark">
     <div id="root"></div>
     
     <script type="text/babel">
@@ -1223,7 +1510,7 @@
             const [currentView, setCurrentView] = useState('dashboard');
             const [darkMode, setDarkMode] = useState(() => {
                 const saved = localStorage.getItem('darkMode');
-                return saved !== null ? saved === 'true' : false;
+                return saved !== null ? saved === 'true' : true;
             });
             const [loading, setLoading] = useState(false);
             const [alert, setAlert] = useState(null);
@@ -1269,7 +1556,7 @@
             });
             const [invoiceSections, setInvoiceSections] = useState([{ description: '', type: 'hourly', rate: '', hours: '', amount: '' }]);
             const [newInvoice, setNewInvoice] = useState({
-                client: '', invoiceDate: '', paymentTerms: 'now', inQuickBooks: 'no', paymentDeadline: '', contactName: '', contactEmail: '', contactPhone: ''
+                client: '', paymentTerms: 'now', inQuickBooks: 'no', paymentDeadline: '', contactName: '', contactEmail: '', contactPhone: ''
             });
             const [newStaff, setNewStaff] = useState({
                 username: '', password: '', role: 'staff', firstName: '', lastName: '', email: ''
@@ -1547,7 +1834,7 @@
                     });
                     showAlert('Invoice created successfully!');
                     setShowNewInvoice(false);
-                    setNewInvoice({ client: '', invoiceDate: '', paymentTerms: 'now', inQuickBooks: 'no', paymentDeadline: '', contactName: '', contactEmail: '', contactPhone: '' });
+                    setNewInvoice({ client: '', paymentTerms: 'now', inQuickBooks: 'no', paymentDeadline: '', contactName: '', contactEmail: '', contactPhone: '' });
                     setInvoiceSections([{ description: '', type: 'hourly', rate: '', hours: '', amount: '' }]);
                     loadData();
                 } catch (error) {
@@ -1571,7 +1858,6 @@
                 try {
                     await api.updateInvoice(editingInvoice.id, {
                         client: editingInvoice.client,
-                        invoiceDate: editingInvoice.invoiceDate,
                         paymentTerms: editingInvoice.paymentTerms,
                         inQuickBooks: editingInvoice.inQuickBooks,
                         paymentDeadline: editingInvoice.paymentDeadline,
@@ -1742,8 +2028,6 @@
                 }
             };
 
-            const formatCurrency = (value) => `£${(parseFloat(value) || 0).toFixed(2)}`;
-
             // Calculate invoice total
             const calculateInvoiceTotal = () => {
                 return invoiceSections.reduce((sum, section) => {
@@ -1768,24 +2052,7 @@
             // Update invoice section
             const updateInvoiceSection = (index, field, value) => {
                 const updated = [...invoiceSections];
-                const current = { ...updated[index] };
-
-                if (field === 'type') {
-                    current.type = value;
-                    if (value === 'fixed') {
-                        current.rate = '';
-                        current.hours = '';
-                        current.amount = current.amount || '';
-                    } else {
-                        current.amount = '';
-                        current.rate = current.rate || '';
-                        current.hours = current.hours || '';
-                    }
-                } else {
-                    current[field] = value;
-                }
-
-                updated[index] = current;
+                updated[index][field] = value;
                 setInvoiceSections(updated);
             };
 
@@ -1878,33 +2145,18 @@
             const handleImportData = async (jsonData) => {
                 if (!jsonData) return showAlert('No data to import', 'error');
 
-                // Helper: parse ISO, Excel serial, UK dates (DD/MM/YYYY), and standard JS dates into YYYY-MM-DD
+                // Helper: try to parse various date formats into ISO string
                 const parseDate = (val) => {
-                    if (val === null || val === undefined || val === '') return null;
-
-                    if (val instanceof Date && !isNaN(val)) {
-                        return val.toISOString().slice(0, 10);
-                    }
-
+                    if (!val || val === '') return null;
+                    // Already ISO-ish
+                    if (typeof val === 'string' && val.match(/^\d{4}-\d{2}-\d{2}/)) return val;
+                    // Excel serial number
                     if (typeof val === 'number') {
-                        const d = new Date(Math.round((val - 25569) * 86400 * 1000));
+                        const d = new Date((val - 25569) * 86400 * 1000);
                         return isNaN(d) ? null : d.toISOString().slice(0, 10);
                     }
-
-                    const str = String(val).trim();
-                    if (!str) return null;
-
-                    if (/^\d{4}-\d{2}-\d{2}/.test(str)) return str.slice(0, 10);
-
-                    const ukMatch = str.match(/^(\d{1,2})\/(\d{1,2})\/(\d{2,4})(?:\s+.*)?$/);
-                    if (ukMatch) {
-                        const day = ukMatch[1].padStart(2, '0');
-                        const month = ukMatch[2].padStart(2, '0');
-                        const year = ukMatch[3].length === 2 ? `20${ukMatch[3]}` : ukMatch[3];
-                        return `${year}-${month}-${day}`;
-                    }
-
-                    const d = new Date(str);
+                    // Formatted string like "01/05/2025" or "5/1/2025"
+                    const d = new Date(val);
                     return isNaN(d) ? null : d.toISOString().slice(0, 10);
                 };
 
@@ -1919,53 +2171,27 @@
                         deadline:     parseDate(row.Deadline || row.deadline),
                         location:     row.Location    || row.location    || null,
                         urgency:     (row.Urgency     || row.urgency     || 'medium').toLowerCase(),
-                        assignedTo:    row['Assigned User ID'] || row.assignedTo || '',
-                        assignedToName: row['Assigned To'] || row.assignedToName || '',
-                        assignedToUsername: row['Assigned Username'] || row.assignedToUsername || '',
-                        assignedToEmail: row['Assigned Email'] || row.assignedToEmail || '',
                         resolution:   row.Resolution  || row.resolution  || null,
                         completedDate: parseDate(row.Completed  || row.completedDate) || null,
                         archivedDate:  parseDate(row.Archived   || row.archivedDate)  || null
                     }))
                     .filter(row => row.client && row.task && row.deadline);
 
-                // Build invoice section map from export workbook so full invoices can be restored
-                const rawInvoiceDetails = jsonData['Invoice Details'] || jsonData.invoiceDetails || [];
-                const sectionsByInvoiceId = {};
-                rawInvoiceDetails.forEach((row) => {
-                    const invoiceId = row['Invoice ID'] || row.invoiceId;
-                    if (!invoiceId) return;
-                    if (!sectionsByInvoiceId[invoiceId]) sectionsByInvoiceId[invoiceId] = [];
-                    const type = (row.Type || row.type || 'hourly').toLowerCase();
-                    const rateVal = row.Rate || row.rate || '';
-                    const amountVal = row['Fixed Amount'] || row.amount || row['Subtotal'] || row.subtotal || '';
-                    sectionsByInvoiceId[invoiceId].push({
-                        description: row.Description || row.description || '',
-                        type,
-                        rate: type === 'hourly' ? String(rateVal).replace(/[£$,]/g, '') : '',
-                        hours: type === 'hourly' ? String(row.Hours || row.hours || '') : '',
-                        amount: type === 'fixed' ? String(amountVal).replace(/[£$,]/g, '') : ''
-                    });
-                });
-
                 // Map exported Invoices sheet rows to backend-expected format
                 const rawInvoices = jsonData.Invoices || jsonData.invoices || [];
                 const invoices = rawInvoices
                     .filter(row => row.Client || row.client)
                     .map(row => ({
-                        importId:      row.ID || row.id || null,
                         client:        row.Client          || row.client          || '',
-                        invoiceDate:   parseDate(row['Invoice Date'] || row.invoiceDate) || null,
                         contactName:   row['Contact Name'] || row.contactName     || null,
                         contactEmail:  row['Contact Email']|| row.contactEmail    || null,
                         contactPhone:  row['Contact Phone']|| row.contactPhone    || null,
-                        paymentTerms: (row['Payment Terms']|| row.paymentTerms   || 'now').toLowerCase().replace(/\s+/g, '_'),
+                        paymentTerms: (row['Payment Terms']|| row.paymentTerms   || 'now').toLowerCase().replace(' ', '_'),
                         paymentDeadline: parseDate(row['Payment Deadline'] || row.paymentDeadline) || null,
                         totalAmount:  parseFloat(String(row['Total Amount'] || row.totalAmount || '0').replace(/[£$,]/g, '')) || 0,
                         inQuickBooks: (row['In QuickBooks'] || row.inQuickBooks || 'no').toLowerCase(),
                         paidDate:      parseDate(row.Paid       || row.paidDate)      || null,
-                        archivedDate:  parseDate(row.Archived   || row.archivedDate)  || null,
-                        sections: sectionsByInvoiceId[row.ID || row.id] || []
+                        archivedDate:  parseDate(row.Archived   || row.archivedDate)  || null
                     }))
                     .filter(row => row.client);
 
@@ -2065,9 +2291,6 @@
                         'Location': t.location || '',
                         'Urgency': t.urgency || '',
                         'Assigned To': t.assignedToName || 'Unassigned',
-                        'Assigned User ID': t.assignedTo || '',
-                        'Assigned Username': t.assignedToUsername || '',
-                        'Assigned Email': t.assignedToEmail || '',
                         'Resolution': t.resolution || '',
                         'Created': new Date(t.createdAt).toLocaleString(),
                         'Updated': t.updatedAt ? new Date(t.updatedAt).toLocaleString() : '',
@@ -2083,7 +2306,6 @@
                         'ID': inv.id,
                         'Status': inv.status,
                         'Client': inv.client,
-                        'Invoice Date': inv.invoiceDate ? new Date(inv.invoiceDate).toLocaleDateString('en-GB') : '',
                         'Contact Name': inv.contactName || '',
                         'Contact Email': inv.contactEmail || '',
                         'Contact Phone': inv.contactPhone || '',
@@ -2178,41 +2400,66 @@
                         {loading && <LoadingSpinner />}
                         {alert && <Alert message={alert.message} type={alert.type} onClose={() => setAlert(null)} />}
                         <div className="login-screen">
-                            <div className="login-card">
-                                <div style={{ textAlign: 'center', marginBottom: '32px' }}>
-                                    <div className="logo-icon" style={{ width: '80px', height: '80px', margin: '0 auto 20px' }}>
-                                        <div className="logo-shape" style={{ width: '24px', height: '24px', background: 'white', borderRadius: '4px', transform: 'rotate(45deg)' }}></div>
-                                        <div className="logo-shape" style={{ width: '16px', height: '16px', background: 'rgba(255,255,255,0.7)', borderRadius: '50%', position: 'absolute', top: '8px', right: '8px' }}></div>
+                            <div className="login-shell">
+                                <div className="login-panel-brand">
+                                    <div className="login-brand-top">
+                                        <img className="login-brand-logo" src="https://geniustech.co.uk/wp-content/uploads/2024/11/GSlogobox-new_W.png" alt="Genius IT Solutions" />
+                                        <div className="login-brand-badge">Portal Systems</div>
+                                        <h1 className="login-brand-title">Welcome to <span>Genius IT Solutions</span></h1>
+                                        <p className="login-brand-copy">Providing Quality IT Support in York, Leeds and Across the UK.</p>
+                                        <p className="login-brand-copy secondary">For Web Design / Web App and Portal Projects, get in touch.</p>
                                     </div>
-                                    <h1 className="logo-text" style={{ fontSize: '32px', marginBottom: '8px' }}>Genius Tech</h1>
-                                    <p style={{ color: 'var(--text-secondary)' }}>Ticketing System</p>
+                                    <div className="login-trust-card">
+                                        <div className="login-trust-title">Professional client access portal</div>
+                                        <div className="login-trust-copy">Secure access for your Genius IT Solutions portal systems with a polished interface designed for production use.</div>
+                                    </div>
                                 </div>
-                                
-                                <form onSubmit={handleLogin}>
-                                    <div style={{ marginBottom: '20px' }}>
-                                        <label className="form-label">USERNAME</label>
-                                        <input
-                                            type="text"
-                                            value={loginForm.username}
-                                            onChange={(e) => setLoginForm({ ...loginForm, username: e.target.value })}
-                                            required
-                                        />
+                                <div className="login-panel-form">
+                                    <div className="login-card">
+                                        <div className="login-card-header">
+                                            <img className="login-card-logo" src="https://geniustech.co.uk/wp-content/uploads/2024/11/GSlogobox-new_W.png" alt="Genius IT Solutions" />
+                                            <div className="login-card-kicker">Portal Systems</div>
+                                            <h2 className="login-card-title">Sign in</h2>
+                                            <p className="login-card-subtitle">Use your username and password to access your Genius IT Solutions portal.</p>
+                                        </div>
+
+                                        <form onSubmit={handleLogin}>
+                                            <div className="login-form-group">
+                                                <label className="login-form-label">Username</label>
+                                                <div className="login-input-wrap">
+                                                    <span className="login-input-icon">👤</span>
+                                                    <input
+                                                        type="text"
+                                                        placeholder="Enter your username"
+                                                        value={loginForm.username}
+                                                        onChange={(e) => setLoginForm({ ...loginForm, username: e.target.value })}
+                                                        required
+                                                    />
+                                                </div>
+                                            </div>
+
+                                            <div className="login-form-group" style={{ marginBottom: '24px' }}>
+                                                <label className="login-form-label">Password</label>
+                                                <div className="login-input-wrap">
+                                                    <span className="login-input-icon">🔒</span>
+                                                    <input
+                                                        type="password"
+                                                        placeholder="Enter your password"
+                                                        value={loginForm.password}
+                                                        onChange={(e) => setLoginForm({ ...loginForm, password: e.target.value })}
+                                                        required
+                                                    />
+                                                </div>
+                                            </div>
+
+                                            <button type="submit" className="login-submit">
+                                                Sign In
+                                            </button>
+                                        </form>
+
+                                        <div className="login-footer-note">Genius IT Solutions · Portal Systems</div>
                                     </div>
-                                    
-                                    <div style={{ marginBottom: '24px' }}>
-                                        <label className="form-label">PASSWORD</label>
-                                        <input
-                                            type="password"
-                                            value={loginForm.password}
-                                            onChange={(e) => setLoginForm({ ...loginForm, password: e.target.value })}
-                                            required
-                                        />
-                                    </div>
-                                    
-                                    <button type="submit" className="btn btn-primary" style={{ width: '100%', justifyContent: 'center' }}>
-                                        Sign In
-                                    </button>
-                                </form>
+                                </div>
                             </div>
                         </div>
                     </>
@@ -2418,7 +2665,7 @@
                                                 <div className="stat-header" style={{justifyContent: 'center', textAlign: 'center'}}>
                                                     <div>
                                                         <div className="stat-icon mint" style={{margin: '0 auto 12px', width: '48px', height: '48px', borderRadius: '12px', display: 'flex', alignItems: 'center', justifyContent: 'center', fontSize: '24px'}}>
-                                                            <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><path d="M16 5a5 5 0 0 0-8 4v3"></path><path d="M5 11h9"></path><path d="M4 15h8"></path><path d="M8 11v4c0 2 1.5 4 4 4h5"></path></svg>
+                                                            <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2"><line x1="12" y1="1" x2="12" y2="23"></line><path d="M17 5H9.5a3.5 3.5 0 000 7h5a3.5 3.5 0 010 7H6"></path></svg>
                                                         </div>
                                                         <div className="stat-label">Revenue</div>
                                                         <div className="stat-value">£{(parseFloat(stats.revenue) || 0).toFixed(2)}</div>
@@ -2800,8 +3047,8 @@
                                             <thead>
                                                 <tr>
                                                     <th>Client</th>
-                                                    <th>Invoice Date</th>
                                                     <th>Amount</th>
+                                                    <th>Date</th>
                                                     <th>Payment Terms</th>
                                                     <th>Actions</th>
                                                 </tr>
@@ -2810,8 +3057,8 @@
                                                 {invoices.map(invoice => (
                                                     <tr key={invoice.id}>
                                                         <td>{invoice.client}</td>
-                                                        <td>{invoice.invoiceDate ? new Date(invoice.invoiceDate).toLocaleDateString('en-GB') : '-'}</td>
-                                                        <td>{formatCurrency(invoice.totalAmount)}</td>
+                                                        <td>£{(parseFloat(invoice.totalAmount) || 0).toFixed(2)}</td>
+                                                        <td>{new Date(invoice.createdAt || invoice.date).toLocaleDateString()}</td>
                                                         <td>{invoice.paymentTerms?.replace('_', ' ') || 'N/A'}</td>
                                                         <td>
                                                             <div className="action-buttons">
@@ -2846,8 +3093,8 @@
                                             <thead>
                                                 <tr>
                                                     <th>Client</th>
-                                                    <th>Invoice Date</th>
                                                     <th>Amount</th>
+                                                    <th>Date</th>
                                                     <th>Paid Date</th>
                                                     <th>Actions</th>
                                                 </tr>
@@ -2856,9 +3103,9 @@
                                                 {paidInvoices.map(invoice => (
                                                     <tr key={invoice.id}>
                                                         <td>{invoice.client}</td>
-                                                        <td>{invoice.invoiceDate ? new Date(invoice.invoiceDate).toLocaleDateString('en-GB') : '-'}</td>
-                                                        <td>{formatCurrency(invoice.totalAmount)}</td>
-                                                        <td>{new Date(invoice.paidAt || invoice.paidDate).toLocaleDateString('en-GB')}</td>
+                                                        <td>£{(parseFloat(invoice.totalAmount) || 0).toFixed(2)}</td>
+                                                        <td>{new Date(invoice.createdAt || invoice.date).toLocaleDateString()}</td>
+                                                        <td>{new Date(invoice.paidAt || invoice.paidDate).toLocaleDateString()}</td>
                                                         <td>
                                                             <div className="action-buttons">
                                                                 <button className="btn btn-secondary" onClick={() => handleArchiveInvoice(invoice.id)}>
@@ -3276,7 +3523,6 @@
                                                 <thead>
                                                     <tr>
                                                         <th>Client</th>
-                                                        <th>Invoice Date</th>
                                                         <th>Amount</th>
                                                         <th>Archived Date</th>
                                                         <th>Actions</th>
@@ -3286,9 +3532,8 @@
                                                     {archivedInvoices.map(invoice => (
                                                         <tr key={invoice.id}>
                                                             <td>{invoice.client}</td>
-                                                            <td>{invoice.invoiceDate ? new Date(invoice.invoiceDate).toLocaleDateString('en-GB') : '-'}</td>
-                                                            <td>{formatCurrency(invoice.totalAmount)}</td>
-                                                            <td>{new Date(invoice.archivedAt || invoice.archivedDate).toLocaleDateString('en-GB')}</td>
+                                                            <td>£{(parseFloat(invoice.totalAmount) || 0).toFixed(2)}</td>
+                                                            <td>{new Date(invoice.archivedAt || invoice.archivedDate).toLocaleDateString()}</td>
                                                             <td>
                                                                 <div className="action-buttons">
                                                                     <button className="btn btn-secondary" onClick={() => handleUnarchiveInvoice(invoice.id)}>
@@ -3525,10 +3770,6 @@
                                     <input value={newInvoice.client} onChange={e => setNewInvoice({...newInvoice, client: e.target.value})} />
                                 </div>
                                 <div className="form-group">
-                                    <label>Invoice Date</label>
-                                    <input type="date" value={newInvoice.invoiceDate} onChange={e => setNewInvoice({...newInvoice, invoiceDate: e.target.value})} />
-                                </div>
-                                <div className="form-group">
                                     <label>Payment Terms</label>
                                     <select value={newInvoice.paymentTerms} onChange={e => setNewInvoice({...newInvoice, paymentTerms: e.target.value})}>
                                         <option value="now">Now</option>
@@ -3598,7 +3839,7 @@
                                                         />
                                                         <span>=</span>
                                                         <div className="invoice-amount">
-                                                            {formatCurrency((parseFloat(section.rate) || 0) * (parseFloat(section.hours) || 0))}
+                                                            £{((parseFloat(section.rate) || 0) * (parseFloat(section.hours) || 0)).toFixed(2)}
                                                         </div>
                                                     </>
                                                 ) : (
@@ -3611,7 +3852,7 @@
                                                             style={{flex: 2}}
                                                         />
                                                         <div className="invoice-amount">
-                                                            {formatCurrency(parseFloat(section.amount) || 0)}
+                                                            £{(parseFloat(section.amount) || 0).toFixed(2)}
                                                         </div>
                                                     </>
                                                 )}
@@ -3627,7 +3868,7 @@
                                     <div style={{display: 'flex', justifyContent: 'space-between', alignItems: 'center'}}>
                                         <div style={{fontSize: '20px', fontWeight: '700'}}>Total</div>
                                         <div style={{fontSize: '24px', fontWeight: '800', color: 'var(--mint-500)'}}>
-                                            {formatCurrency(calculateInvoiceTotal())}
+                                            £{calculateInvoiceTotal().toFixed(2)}
                                         </div>
                                     </div>
                                 </div>
@@ -3653,10 +3894,6 @@
                                     <input value={editingInvoice.client} onChange={e => setEditingInvoice({...editingInvoice, client: e.target.value})} />
                                 </div>
                                 <div className="form-group">
-                                    <label>Invoice Date</label>
-                                    <input type="date" value={editingInvoice.invoiceDate || ''} onChange={e => setEditingInvoice({...editingInvoice, invoiceDate: e.target.value})} />
-                                </div>
-                                <div className="form-group">
                                     <label>Payment Terms</label>
                                     <select value={editingInvoice.paymentTerms} onChange={e => setEditingInvoice({...editingInvoice, paymentTerms: e.target.value})}>
                                         <option value="now">Now</option>
@@ -3669,10 +3906,6 @@
                                         <option value="no">No</option>
                                         <option value="yes">Yes</option>
                                     </select>
-                                </div>
-                                <div className="form-group">
-                                    <label>Payment Deadline</label>
-                                    <input type="date" value={editingInvoice.paymentDeadline || ''} onChange={e => setEditingInvoice({...editingInvoice, paymentDeadline: e.target.value})} />
                                 </div>
                                 <div className="form-group">
                                     <label>Contact Name</label>
@@ -3726,7 +3959,7 @@
                                                         />
                                                         <span>=</span>
                                                         <div className="invoice-amount">
-                                                            {formatCurrency((parseFloat(section.rate) || 0) * (parseFloat(section.hours) || 0))}
+                                                            £{((parseFloat(section.rate) || 0) * (parseFloat(section.hours) || 0)).toFixed(2)}
                                                         </div>
                                                     </>
                                                 ) : (
@@ -3739,7 +3972,7 @@
                                                             style={{flex: 2}}
                                                         />
                                                         <div className="invoice-amount">
-                                                            {formatCurrency(parseFloat(section.amount) || 0)}
+                                                            £{(parseFloat(section.amount) || 0).toFixed(2)}
                                                         </div>
                                                     </>
                                                 )}
@@ -3755,7 +3988,7 @@
                                     <div style={{display: 'flex', justifyContent: 'space-between', alignItems: 'center'}}>
                                         <div style={{fontSize: '20px', fontWeight: '700'}}>Total</div>
                                         <div style={{fontSize: '24px', fontWeight: '800', color: 'var(--mint-500)'}}>
-                                            {formatCurrency(calculateInvoiceTotal())}
+                                            £{calculateInvoiceTotal().toFixed(2)}
                                         </div>
                                     </div>
                                 </div>

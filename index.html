@@ -4,7 +4,8 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Genius IT Solutions - Portal Systems</title>
-    <link rel="icon" type="image/svg+xml" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'%3E%3Cdefs%3E%3ClinearGradient id='grad' x1='0%25' y1='0%25' x2='100%25' y2='100%25'%3E%3Cstop offset='0%25' style='stop-color:%231a6fa1;stop-opacity:1' /%3E%3Cstop offset='100%25' style='stop-color:%232d8cc8;stop-opacity:1' /%3E%3C/linearGradient%3E%3C/defs%3E%3Cpath d='M20,20 Q20,10 30,10 L70,10 Q80,10 80,20 L80,30 Q90,30 90,40 L90,70 Q90,80 80,80 L30,80 Q20,80 20,70 Z' fill='url(%23grad)'/%3E%3Cpath d='M35,35 L65,35 L65,50 L50,50 L50,65 L35,65 Z' fill='white' opacity='0.9'/%3E%3C/svg%3E">
+    <link rel="icon" type="image/png" href="https://geniustech.co.uk/wp-content/uploads/2024/11/cropped-GSlogobox-new_W-32x32.png">
+    <link rel="apple-touch-icon" href="https://geniustech.co.uk/wp-content/uploads/2024/11/cropped-GSlogobox-new_W-180x180.png">
     <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
     <script src="https://unpkg.com/react@18/umd/react.production.min.js"></script>
     <script src="https://unpkg.com/react-dom@18/umd/react-dom.production.min.js"></script>
@@ -180,6 +181,7 @@
             display: flex;
             flex-direction: column;
             flex-shrink: 0;
+            min-height: 0;
             transition: transform 0.3s ease;
         }
         
@@ -219,6 +221,13 @@
                 position: fixed;
                 z-index: 100;
                 transform: translateX(-100%);
+                top: 0;
+                left: 0;
+                bottom: 0;
+                height: 100dvh;
+                max-height: 100dvh;
+                overflow-y: auto;
+                -webkit-overflow-scrolling: touch;
             }
             
             .sidebar.mobile-open {
@@ -311,8 +320,10 @@
         
         .nav {
             flex: 1;
+            min-height: 0;
             padding: 16px;
             overflow-y: auto;
+            -webkit-overflow-scrolling: touch;
         }
         
         .nav-item {
@@ -359,6 +370,8 @@
         .sidebar-footer {
             padding: 16px;
             border-top: 1px solid var(--border-color);
+            background: var(--bg-sidebar);
+            flex-shrink: 0;
         }
         
         .theme-toggle {
@@ -1023,15 +1036,34 @@
         .login-input-wrap input {
             border: none !important;
             background: transparent !important;
+            background-color: transparent !important;
             color: #102542 !important;
+            -webkit-text-fill-color: #102542 !important;
+            color-scheme: light;
             font-size: 17px;
-            padding: 0 !important;
+            padding: 0 0 0 8px !important;
+            text-indent: 2px;
             min-height: auto !important;
+            min-width: 0;
             box-shadow: none !important;
+            outline: none !important;
+            appearance: none;
+            -webkit-appearance: none;
         }
 
         .login-input-wrap input::placeholder {
             color: #97a7b8;
+            opacity: 1;
+        }
+
+        .login-input-wrap input:-webkit-autofill,
+        .login-input-wrap input:-webkit-autofill:hover,
+        .login-input-wrap input:-webkit-autofill:focus {
+            -webkit-text-fill-color: #102542 !important;
+            -webkit-box-shadow: 0 0 0 1000px transparent inset !important;
+            box-shadow: 0 0 0 1000px transparent inset !important;
+            transition: background-color 9999s ease-out 0s;
+            border-radius: 0 !important;
         }
 
         .login-submit {
@@ -1296,7 +1328,7 @@
         }
     </style>
 </head>
-<body class="dark">
+<body class="light">
     <div id="root"></div>
     
     <script type="text/babel">
@@ -1523,7 +1555,7 @@
             const [currentView, setCurrentView] = useState('dashboard');
             const [darkMode, setDarkMode] = useState(() => {
                 const saved = localStorage.getItem('darkMode');
-                return saved !== null ? saved === 'true' : true;
+                return saved !== null ? saved === 'true' : false;
             });
             const [loading, setLoading] = useState(false);
             const [alert, setAlert] = useState(null);
@@ -1676,6 +1708,12 @@
                 document.body.className = darkMode ? 'dark' : 'light';
                 localStorage.setItem('darkMode', darkMode.toString());
             }, [darkMode]);
+
+            useEffect(() => {
+                if (!currentUser && darkMode) {
+                    setDarkMode(false);
+                }
+            }, [currentUser]);
 
             // Check for existing session
             useEffect(() => {
@@ -2443,7 +2481,9 @@
                                                     <span className="login-input-icon">👤</span>
                                                     <input
                                                         type="text"
-                                                        placeholder="Enter your username"
+                                                        autoComplete="username"
+                                                        spellCheck="false"
+                                                        placeholder="  Enter your username"
                                                         value={loginForm.username}
                                                         onChange={(e) => setLoginForm({ ...loginForm, username: e.target.value })}
                                                         required
@@ -2457,7 +2497,8 @@
                                                     <span className="login-input-icon">🔒</span>
                                                     <input
                                                         type="password"
-                                                        placeholder="Enter your password"
+                                                        autoComplete="current-password"
+                                                        placeholder="  Enter your password"
                                                         value={loginForm.password}
                                                         onChange={(e) => setLoginForm({ ...loginForm, password: e.target.value })}
                                                         required

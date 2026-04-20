@@ -1798,7 +1798,10 @@
                         api.getInvoices('paid'),
                         api.getInvoices('archived'),
                         api.getStats(),
-                        api.getPortalLinks(),
+                        api.getPortalLinks().catch((error) => {
+                            console.warn('Portal links unavailable:', error.message);
+                            return [];
+                        }),
                         currentUser.role !== 'staff' ? api.getUsers() : Promise.resolve([])
                     ]);
 

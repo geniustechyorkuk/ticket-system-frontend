@@ -181,7 +181,6 @@
             display: flex;
             flex-direction: column;
             flex-shrink: 0;
-            min-height: 0;
             transition: transform 0.3s ease;
         }
         
@@ -221,13 +220,6 @@
                 position: fixed;
                 z-index: 100;
                 transform: translateX(-100%);
-                top: 0;
-                left: 0;
-                bottom: 0;
-                height: 100dvh;
-                max-height: 100dvh;
-                overflow-y: auto;
-                -webkit-overflow-scrolling: touch;
             }
             
             .sidebar.mobile-open {
@@ -320,10 +312,8 @@
         
         .nav {
             flex: 1;
-            min-height: 0;
             padding: 16px;
             overflow-y: auto;
-            -webkit-overflow-scrolling: touch;
         }
         
         .nav-item {
@@ -370,8 +360,6 @@
         .sidebar-footer {
             padding: 16px;
             border-top: 1px solid var(--border-color);
-            background: var(--bg-sidebar);
-            flex-shrink: 0;
         }
         
         .theme-toggle {
@@ -1036,34 +1024,15 @@
         .login-input-wrap input {
             border: none !important;
             background: transparent !important;
-            background-color: transparent !important;
             color: #102542 !important;
-            -webkit-text-fill-color: #102542 !important;
-            color-scheme: light;
             font-size: 17px;
-            padding: 0 0 0 8px !important;
-            text-indent: 2px;
+            padding: 0 !important;
             min-height: auto !important;
-            min-width: 0;
             box-shadow: none !important;
-            outline: none !important;
-            appearance: none;
-            -webkit-appearance: none;
         }
 
         .login-input-wrap input::placeholder {
             color: #97a7b8;
-            opacity: 1;
-        }
-
-        .login-input-wrap input:-webkit-autofill,
-        .login-input-wrap input:-webkit-autofill:hover,
-        .login-input-wrap input:-webkit-autofill:focus {
-            -webkit-text-fill-color: #102542 !important;
-            -webkit-box-shadow: 0 0 0 1000px transparent inset !important;
-            box-shadow: 0 0 0 1000px transparent inset !important;
-            transition: background-color 9999s ease-out 0s;
-            border-radius: 0 !important;
         }
 
         .login-submit {
@@ -1298,6 +1267,120 @@
             white-space: nowrap;
         }
 
+
+
+        .sidebar {
+            overflow: hidden;
+        }
+
+        .sidebar-footer {
+            flex-shrink: 0;
+        }
+
+        .nav {
+            min-height: 0;
+            overflow-y: auto;
+            overscroll-behavior: contain;
+        }
+
+        .login-input-wrap input {
+            padding-left: 10px !important;
+            text-indent: 6px;
+            -webkit-appearance: none;
+            appearance: none;
+        }
+
+        .login-input-wrap input:-webkit-autofill,
+        .login-input-wrap input:-webkit-autofill:hover,
+        .login-input-wrap input:-webkit-autofill:focus,
+        .login-input-wrap input:-webkit-autofill:active {
+            -webkit-box-shadow: 0 0 0 1000px rgba(255,255,255,0) inset !important;
+            -webkit-text-fill-color: #102542 !important;
+            caret-color: #102542 !important;
+            transition: background-color 5000s ease-in-out 0s;
+        }
+
+        .shortcut-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(140px, 1fr));
+            gap: 16px;
+            margin-bottom: 24px;
+        }
+
+        .shortcut-tile {
+            background: var(--bg-secondary);
+            border: 1px solid var(--border-color);
+            box-shadow: var(--shadow);
+            border-radius: 16px;
+            min-height: 108px;
+            padding: 18px 14px;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            gap: 12px;
+            cursor: pointer;
+            transition: transform 0.18s ease, box-shadow 0.18s ease, border-color 0.18s ease;
+            text-align: center;
+        }
+
+        .shortcut-tile:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 14px 28px rgba(26, 111, 161, 0.16);
+            border-color: rgba(26, 111, 161, 0.24);
+        }
+
+        .shortcut-icon-wrap {
+            width: 42px;
+            height: 42px;
+            border-radius: 12px;
+            background: rgba(26, 111, 161, 0.08);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            overflow: hidden;
+        }
+
+        .shortcut-icon-wrap img {
+            width: 26px;
+            height: 26px;
+            object-fit: contain;
+        }
+
+        .shortcut-label {
+            font-size: 13px;
+            font-weight: 800;
+            letter-spacing: 0.08em;
+            text-transform: uppercase;
+            color: var(--text-primary);
+            line-height: 1.35;
+        }
+
+        .shortcut-empty {
+            padding: 18px;
+            border-radius: 16px;
+            background: rgba(26, 111, 161, 0.04);
+            color: var(--text-secondary);
+            border: 1px dashed rgba(26, 111, 161, 0.18);
+            margin-bottom: 24px;
+        }
+
+        @media (max-width: 768px) {
+            .shortcut-grid {
+                grid-template-columns: repeat(2, minmax(0, 1fr));
+                gap: 12px;
+            }
+
+            .shortcut-tile {
+                min-height: 96px;
+                padding: 14px 10px;
+            }
+
+            .shortcut-label {
+                font-size: 12px;
+            }
+        }
+
         .connection-status {
             position: fixed;
             bottom: 20px;
@@ -1481,7 +1564,15 @@
             // Analytics
             getStats: () => api.request('/analytics/stats'),
             
-            getMonthlyData: () => api.request('/analytics/monthly')
+            getMonthlyData: () => api.request('/analytics/monthly'),
+
+            getPortalLinks: () => api.request('/portal-links'),
+
+            savePortalLinks: (links) =>
+                api.request('/portal-links', {
+                    method: 'POST',
+                    body: JSON.stringify({ links })
+                })
         };
 
         // Alert Component
@@ -1618,10 +1709,69 @@
                 pass: '',
                 from: ''
             });
+            const [portalLinks, setPortalLinks] = useState([]);
+            const [portalLinksDraft, setPortalLinksDraft] = useState([]);
 
             // Show alert
             const showAlert = (message, type = 'success') => {
                 setAlert({ message, type });
+            };
+
+            const createEmptyPortalLink = () => ({ label: '', url: '' });
+
+            const normalizePortalUrl = (value) => {
+                if (!value) return '';
+                const trimmed = value.trim();
+                if (!trimmed) return '';
+                return /^https?:\/\//i.test(trimmed) ? trimmed : `https://${trimmed}`;
+            };
+
+            const getPortalLinkIcon = (url) => {
+                const safeUrl = normalizePortalUrl(url);
+                if (!safeUrl) return '';
+                return `https://www.google.com/s2/favicons?sz=64&domain_url=${encodeURIComponent(safeUrl)}`;
+            };
+
+            const openPortalLink = (url) => {
+                const safeUrl = normalizePortalUrl(url);
+                if (!safeUrl) return;
+                window.open(safeUrl, '_blank', 'noopener,noreferrer');
+            };
+
+            const handlePortalLinkDraftChange = (index, field, value) => {
+                setPortalLinksDraft(prev => prev.map((item, i) => i === index ? { ...item, [field]: value } : item));
+            };
+
+            const addPortalLinkDraft = () => {
+                setPortalLinksDraft(prev => [...prev, createEmptyPortalLink()]);
+            };
+
+            const removePortalLinkDraft = (index) => {
+                setPortalLinksDraft(prev => prev.filter((_, i) => i !== index));
+            };
+
+            const handleSavePortalLinks = async () => {
+                const cleaned = portalLinksDraft
+                    .map(item => ({ label: (item.label || '').trim(), url: normalizePortalUrl(item.url || '') }))
+                    .filter(item => item.label && item.url);
+
+                if (portalLinksDraft.length > 0 && cleaned.length === 0) {
+                    showAlert('Add at least one complete website tile or remove empty rows.', 'error');
+                    return;
+                }
+
+                setLoading(true);
+                try {
+                    const saved = await api.savePortalLinks(cleaned);
+                    const links = Array.isArray(saved) ? saved : (saved.links || []);
+                    setPortalLinks(links);
+                    setPortalLinksDraft(links.length ? links : []);
+                    showAlert('Website tiles saved successfully!');
+                } catch (error) {
+                    showAlert(error.message || 'Failed to save website tiles', 'error');
+                } finally {
+                    setLoading(false);
+                }
             };
 
             // Load initial data
@@ -1638,6 +1788,7 @@
                         paidInvoicesData,
                         archivedInvoicesData,
                         statsData,
+                        portalLinksData,
                         usersData
                     ] = await Promise.all([
                         api.getTickets('active'),
@@ -1647,6 +1798,7 @@
                         api.getInvoices('paid'),
                         api.getInvoices('archived'),
                         api.getStats(),
+                        api.getPortalLinks(),
                         currentUser.role !== 'staff' ? api.getUsers() : Promise.resolve([])
                     ]);
 
@@ -1675,6 +1827,8 @@
                         activeInvoices: activeInvoices.length
                     });
                     
+                    setPortalLinks(Array.isArray(portalLinksData) ? portalLinksData : []);
+                    setPortalLinksDraft(Array.isArray(portalLinksData) ? portalLinksData : []);
                     if (currentUser.role !== 'staff') setUsers(usersData);
                 } catch (error) {
                     showAlert(error.message, 'error');
@@ -1708,12 +1862,6 @@
                 document.body.className = darkMode ? 'dark' : 'light';
                 localStorage.setItem('darkMode', darkMode.toString());
             }, [darkMode]);
-
-            useEffect(() => {
-                if (!currentUser && darkMode) {
-                    setDarkMode(false);
-                }
-            }, [currentUser]);
 
             // Check for existing session
             useEffect(() => {
@@ -2481,9 +2629,7 @@
                                                     <span className="login-input-icon">👤</span>
                                                     <input
                                                         type="text"
-                                                        autoComplete="username"
-                                                        spellCheck="false"
-                                                        placeholder="  Enter your username"
+                                                        placeholder="Enter your username"
                                                         value={loginForm.username}
                                                         onChange={(e) => setLoginForm({ ...loginForm, username: e.target.value })}
                                                         required
@@ -2497,8 +2643,7 @@
                                                     <span className="login-input-icon">🔒</span>
                                                     <input
                                                         type="password"
-                                                        autoComplete="current-password"
-                                                        placeholder="  Enter your password"
+                                                        placeholder="Enter your password"
                                                         value={loginForm.password}
                                                         onChange={(e) => setLoginForm({ ...loginForm, password: e.target.value })}
                                                         required
@@ -2670,6 +2815,21 @@
                                 {/* Dashboard View */}
                                 {currentView === 'dashboard' && (
                                     <>
+                                        {portalLinks.length > 0 ? (
+                                            <div className="shortcut-grid">
+                                                {portalLinks.map((link, index) => (
+                                                    <div key={`${link.url}-${index}`} className="shortcut-tile" onClick={() => openPortalLink(link.url)} title={normalizePortalUrl(link.url)}>
+                                                        <div className="shortcut-icon-wrap">
+                                                            <img src={getPortalLinkIcon(link.url)} alt={`${link.label} icon`} />
+                                                        </div>
+                                                        <div className="shortcut-label">{link.label}</div>
+                                                    </div>
+                                                ))}
+                                            </div>
+                                        ) : currentUser.role === 'owner' ? (
+                                            <div className="shortcut-empty">You have no website shortcut tiles yet. Open <strong>Data Management → Website Tiles</strong> to add them.</div>
+                                        ) : null}
+
                                         <div className="stats-grid">
                                             <div className="stat-card" style={{cursor: 'pointer'}} onClick={() => handleNavClick('tickets')}>
                                                 <div className="stat-header" style={{justifyContent: 'center', textAlign: 'center'}}>
@@ -2719,7 +2879,7 @@
                                                 <div className="stat-header" style={{justifyContent: 'center', textAlign: 'center'}}>
                                                     <div>
                                                         <div className="stat-icon mint" style={{margin: '0 auto 12px', width: '48px', height: '48px', borderRadius: '12px', display: 'flex', alignItems: 'center', justifyContent: 'center', fontSize: '24px'}}>
-                                                            <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2"><line x1="12" y1="1" x2="12" y2="23"></line><path d="M17 5H9.5a3.5 3.5 0 000 7h5a3.5 3.5 0 010 7H6"></path></svg>
+                                                            <span style={{fontSize: '28px', fontWeight: '800', lineHeight: '1'}}>£</span>
                                                         </div>
                                                         <div className="stat-label">Revenue</div>
                                                         <div className="stat-value">£{(parseFloat(stats.revenue) || 0).toFixed(2)}</div>
@@ -3379,7 +3539,7 @@
                                         </div>
                                         {/* Sub-tabs */}
                                         <div style={{display: 'flex', gap: '4px', padding: '16px 24px 0', borderBottom: '2px solid var(--border-color)'}}>
-                                            {['export', 'import', 'clear'].map(tab => (
+                                            {['export', 'import', 'links', 'clear'].map(tab => (
                                                 <button
                                                     key={tab}
                                                     onClick={() => setDataSubTab(tab)}
@@ -3399,6 +3559,7 @@
                                                     }}>
                                                     {tab === 'export' && (<><Icon name="download" size={14} /> Export</>)}
                                                     {tab === 'import' && (<><Icon name="upload" size={14} /> Import</>)}
+                                                    {tab === 'links' && (<><Icon name="settings" size={14} /> Website Tiles</>)}
                                                     {tab === 'clear' && (<><Icon name="trash" size={14} /> Clear Data</>)}
                                                 </button>
                                             ))}

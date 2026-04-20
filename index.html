@@ -3308,6 +3308,24 @@
                                 {currentView === 'dashboard' && (
                                     <>
                                         <div className="dashboard-top-layout">
+                                            <div className="tiles-panel">
+                                                {portalLinks.length > 0 ? (
+                                                    <div className="shortcut-grid">
+                                                        {portalLinks.map((link, index) => (
+                                                            <div key={`${link.url}-${index}`} className="shortcut-tile" onClick={() => openPortalLink(link.url)} title={normalizePortalUrl(link.url)}>
+                                                                <div className="shortcut-icon-wrap">
+                                                                    <img src={getPortalLinkIcon(link.url)} alt="" className="shortcut-icon" onError={(e) => { e.currentTarget.style.display = 'none'; }} />
+                                                                </div>
+                                                                <div className="shortcut-label">{String(link.label || '').toUpperCase()}</div>
+                                                                {link.category ? <div className="shortcut-category">{String(link.category || '').toUpperCase()}</div> : null}
+                                                            </div>
+                                                        ))}
+                                                    </div>
+                                                ) : currentUser?.role === 'owner' ? (
+                                                    <div className="shortcut-empty">No website tiles configured yet. Go to <strong>Data Management → Website Tiles</strong> to add them.</div>
+                                                ) : null}
+                                            </div>
+
                                             <div className="events-panel">
                                                 <div className="events-panel-header">
                                                     <div className="events-panel-title">Upcoming Appointments</div>
@@ -3329,23 +3347,6 @@
                                                 ) : (
                                                     <div className="events-empty">No upcoming appointments found in the next 30 days.</div>
                                                 )}
-                                            </div>
-
-                                            <div className="tiles-panel">
-                                                {portalLinks.length > 0 ? (
-                                                    <div className="shortcut-grid">
-                                                        {portalLinks.map((link, index) => (
-                                                            <div key={`${link.url}-${index}`} className="shortcut-tile" onClick={() => openPortalLink(link.url)} title={normalizePortalUrl(link.url)}>
-                                                                <div className="shortcut-icon-wrap">
-                                                                    <img src={getPortalLinkIcon(link.url)} alt={`${link.label} icon`} />
-                                                                </div>
-                                                                <div className="shortcut-label">{link.label}</div>{link.category ? <div className="shortcut-category">{String(link.category).toUpperCase()}</div> : null}
-                                                            </div>
-                                                        ))}
-                                                    </div>
-                                                ) : currentUser.role === 'owner' ? (
-                                                    <div className="shortcut-empty">You have no website shortcut tiles yet. Open <strong>Data Management → Website Tiles</strong> to add them.</div>
-                                                ) : null}
                                             </div>
                                         </div>
 

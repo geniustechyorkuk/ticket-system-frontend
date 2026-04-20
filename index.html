@@ -255,6 +255,28 @@
             .stats-grid {
                 grid-template-columns: 1fr !important;
             }
+
+            .login-card-enhanced {
+                padding: 22px !important;
+            }
+
+            .login-logo-wrap {
+                width: 116px;
+                height: 116px;
+                border-radius: 22px;
+            }
+
+            .page-title {
+                font-size: 18px !important;
+            }
+
+            .topbar {
+                min-height: 72px;
+            }
+
+            .topbar-actions .btn span {
+                display: none;
+            }
         }
         
         .sidebar-header {
@@ -879,6 +901,71 @@
             white-space: nowrap;
         }
 
+
+        .login-card-enhanced {
+            max-width: 520px;
+            padding: 40px;
+            box-shadow: 0 24px 80px rgba(7, 28, 49, 0.22);
+            backdrop-filter: blur(12px);
+        }
+
+        .login-brand {
+            text-align: center;
+            margin-bottom: 32px;
+        }
+
+        .login-logo-wrap {
+            width: 140px;
+            height: 140px;
+            margin: 0 auto 20px;
+            padding: 18px;
+            border-radius: 28px;
+            background: linear-gradient(135deg, rgba(26, 111, 161, 0.16), rgba(45, 140, 200, 0.08));
+            border: 1px solid rgba(45, 140, 200, 0.2);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+
+        .login-logo-image {
+            width: 100%;
+            height: auto;
+            object-fit: contain;
+        }
+
+        .login-eyebrow {
+            font-size: 12px;
+            letter-spacing: 0.18em;
+            text-transform: uppercase;
+            color: var(--logo-blue-light);
+            font-weight: 700;
+            margin-bottom: 12px;
+        }
+
+        .login-title {
+            font-size: clamp(34px, 5vw, 48px);
+            font-weight: 800;
+            color: var(--text-primary);
+            line-height: 1.05;
+            margin-bottom: 10px;
+        }
+
+        .login-subtitle {
+            font-size: 15px;
+            color: var(--text-secondary);
+            line-height: 1.6;
+            max-width: 360px;
+            margin: 0 auto;
+        }
+
+        .login-submit-btn {
+            width: 100%;
+            margin-top: 12px;
+            padding: 18px;
+            font-size: 18px;
+            justify-content: center;
+        }
+
         .connection-status {
             position: fixed;
             bottom: 20px;
@@ -909,7 +996,7 @@
         }
     </style>
 </head>
-<body class="dark">
+<body class="light">
     <div id="root"></div>
     
     <script type="text/babel">
@@ -1136,7 +1223,7 @@
             const [currentView, setCurrentView] = useState('dashboard');
             const [darkMode, setDarkMode] = useState(() => {
                 const saved = localStorage.getItem('darkMode');
-                return saved !== null ? saved === 'true' : true;
+                return saved !== null ? saved === 'true' : false;
             });
             const [loading, setLoading] = useState(false);
             const [alert, setAlert] = useState(null);
@@ -1182,7 +1269,7 @@
             });
             const [invoiceSections, setInvoiceSections] = useState([{ description: '', type: 'hourly', rate: '', hours: '', amount: '' }]);
             const [newInvoice, setNewInvoice] = useState({
-                client: '', paymentTerms: 'now', inQuickBooks: 'no', paymentDeadline: '', contactName: '', contactEmail: '', contactPhone: ''
+                client: '', invoiceDate: '', paymentTerms: 'now', inQuickBooks: 'no', paymentDeadline: '', contactName: '', contactEmail: '', contactPhone: ''
             });
             const [newStaff, setNewStaff] = useState({
                 username: '', password: '', role: 'staff', firstName: '', lastName: '', email: ''
@@ -1460,7 +1547,7 @@
                     });
                     showAlert('Invoice created successfully!');
                     setShowNewInvoice(false);
-                    setNewInvoice({ client: '', paymentTerms: 'now', inQuickBooks: 'no', paymentDeadline: '', contactName: '', contactEmail: '', contactPhone: '' });
+                    setNewInvoice({ client: '', invoiceDate: '', paymentTerms: 'now', inQuickBooks: 'no', paymentDeadline: '', contactName: '', contactEmail: '', contactPhone: '' });
                     setInvoiceSections([{ description: '', type: 'hourly', rate: '', hours: '', amount: '' }]);
                     loadData();
                 } catch (error) {
@@ -1484,6 +1571,7 @@
                 try {
                     await api.updateInvoice(editingInvoice.id, {
                         client: editingInvoice.client,
+                        invoiceDate: editingInvoice.invoiceDate,
                         paymentTerms: editingInvoice.paymentTerms,
                         inQuickBooks: editingInvoice.inQuickBooks,
                         paymentDeadline: editingInvoice.paymentDeadline,
@@ -1654,6 +1742,8 @@
                 }
             };
 
+            const formatCurrency = (value) => `£${(parseFloat(value) || 0).toFixed(2)}`;
+
             // Calculate invoice total
             const calculateInvoiceTotal = () => {
                 return invoiceSections.reduce((sum, section) => {
@@ -1678,7 +1768,24 @@
             // Update invoice section
             const updateInvoiceSection = (index, field, value) => {
                 const updated = [...invoiceSections];
-                updated[index][field] = value;
+                const current = { ...updated[index] };
+
+                if (field === 'type') {
+                    current.type = value;
+                    if (value === 'fixed') {
+                        current.rate = '';
+                        current.hours = '';
+                        current.amount = current.amount || '';
+                    } else {
+                        current.amount = '';
+                        current.rate = current.rate || '';
+                        current.hours = current.hours || '';
+                    }
+                } else {
+                    current[field] = value;
+                }
+
+                updated[index] = current;
                 setInvoiceSections(updated);
             };
 
@@ -1771,18 +1878,33 @@
             const handleImportData = async (jsonData) => {
                 if (!jsonData) return showAlert('No data to import', 'error');
 
-                // Helper: try to parse various date formats into ISO string
+                // Helper: parse ISO, Excel serial, UK dates (DD/MM/YYYY), and standard JS dates into YYYY-MM-DD
                 const parseDate = (val) => {
-                    if (!val || val === '') return null;
-                    // Already ISO-ish
-                    if (typeof val === 'string' && val.match(/^\d{4}-\d{2}-\d{2}/)) return val;
-                    // Excel serial number
+                    if (val === null || val === undefined || val === '') return null;
+
+                    if (val instanceof Date && !isNaN(val)) {
+                        return val.toISOString().slice(0, 10);
+                    }
+
                     if (typeof val === 'number') {
-                        const d = new Date((val - 25569) * 86400 * 1000);
+                        const d = new Date(Math.round((val - 25569) * 86400 * 1000));
                         return isNaN(d) ? null : d.toISOString().slice(0, 10);
                     }
-                    // Formatted string like "01/05/2025" or "5/1/2025"
-                    const d = new Date(val);
+
+                    const str = String(val).trim();
+                    if (!str) return null;
+
+                    if (/^\d{4}-\d{2}-\d{2}/.test(str)) return str.slice(0, 10);
+
+                    const ukMatch = str.match(/^(\d{1,2})\/(\d{1,2})\/(\d{2,4})(?:\s+.*)?$/);
+                    if (ukMatch) {
+                        const day = ukMatch[1].padStart(2, '0');
+                        const month = ukMatch[2].padStart(2, '0');
+                        const year = ukMatch[3].length === 2 ? `20${ukMatch[3]}` : ukMatch[3];
+                        return `${year}-${month}-${day}`;
+                    }
+
+                    const d = new Date(str);
                     return isNaN(d) ? null : d.toISOString().slice(0, 10);
                 };
 
@@ -1803,21 +1925,43 @@
                     }))
                     .filter(row => row.client && row.task && row.deadline);
 
+                // Build invoice section map from export workbook so full invoices can be restored
+                const rawInvoiceDetails = jsonData['Invoice Details'] || jsonData.invoiceDetails || [];
+                const sectionsByInvoiceId = {};
+                rawInvoiceDetails.forEach((row) => {
+                    const invoiceId = row['Invoice ID'] || row.invoiceId;
+                    if (!invoiceId) return;
+                    if (!sectionsByInvoiceId[invoiceId]) sectionsByInvoiceId[invoiceId] = [];
+                    const type = (row.Type || row.type || 'hourly').toLowerCase();
+                    const rateVal = row.Rate || row.rate || '';
+                    const amountVal = row['Fixed Amount'] || row.amount || row['Subtotal'] || row.subtotal || '';
+                    sectionsByInvoiceId[invoiceId].push({
+                        description: row.Description || row.description || '',
+                        type,
+                        rate: type === 'hourly' ? String(rateVal).replace(/[£$,]/g, '') : '',
+                        hours: type === 'hourly' ? String(row.Hours || row.hours || '') : '',
+                        amount: type === 'fixed' ? String(amountVal).replace(/[£$,]/g, '') : ''
+                    });
+                });
+
                 // Map exported Invoices sheet rows to backend-expected format
                 const rawInvoices = jsonData.Invoices || jsonData.invoices || [];
                 const invoices = rawInvoices
                     .filter(row => row.Client || row.client)
                     .map(row => ({
+                        importId:      row.ID || row.id || null,
                         client:        row.Client          || row.client          || '',
+                        invoiceDate:   parseDate(row['Invoice Date'] || row.invoiceDate) || null,
                         contactName:   row['Contact Name'] || row.contactName     || null,
                         contactEmail:  row['Contact Email']|| row.contactEmail    || null,
                         contactPhone:  row['Contact Phone']|| row.contactPhone    || null,
-                        paymentTerms: (row['Payment Terms']|| row.paymentTerms   || 'now').toLowerCase().replace(' ', '_'),
+                        paymentTerms: (row['Payment Terms']|| row.paymentTerms   || 'now').toLowerCase().replace(/\s+/g, '_'),
                         paymentDeadline: parseDate(row['Payment Deadline'] || row.paymentDeadline) || null,
                         totalAmount:  parseFloat(String(row['Total Amount'] || row.totalAmount || '0').replace(/[£$,]/g, '')) || 0,
                         inQuickBooks: (row['In QuickBooks'] || row.inQuickBooks || 'no').toLowerCase(),
                         paidDate:      parseDate(row.Paid       || row.paidDate)      || null,
-                        archivedDate:  parseDate(row.Archived   || row.archivedDate)  || null
+                        archivedDate:  parseDate(row.Archived   || row.archivedDate)  || null,
+                        sections: sectionsByInvoiceId[row.ID || row.id] || []
                     }))
                     .filter(row => row.client);
 
@@ -1932,6 +2076,7 @@
                         'ID': inv.id,
                         'Status': inv.status,
                         'Client': inv.client,
+                        'Invoice Date': inv.invoiceDate ? new Date(inv.invoiceDate).toLocaleDateString('en-GB') : '',
                         'Contact Name': inv.contactName || '',
                         'Contact Email': inv.contactEmail || '',
                         'Contact Phone': inv.contactPhone || '',
@@ -2266,7 +2411,7 @@
                                                 <div className="stat-header" style={{justifyContent: 'center', textAlign: 'center'}}>
                                                     <div>
                                                         <div className="stat-icon mint" style={{margin: '0 auto 12px', width: '48px', height: '48px', borderRadius: '12px', display: 'flex', alignItems: 'center', justifyContent: 'center', fontSize: '24px'}}>
-                                                            <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2"><line x1="12" y1="1" x2="12" y2="23"></line><path d="M17 5H9.5a3.5 3.5 0 000 7h5a3.5 3.5 0 010 7H6"></path></svg>
+                                                            <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><path d="M16 5a5 5 0 0 0-8 4v3"></path><path d="M5 11h9"></path><path d="M4 15h8"></path><path d="M8 11v4c0 2 1.5 4 4 4h5"></path></svg>
                                                         </div>
                                                         <div className="stat-label">Revenue</div>
                                                         <div className="stat-value">£{(parseFloat(stats.revenue) || 0).toFixed(2)}</div>
@@ -2648,8 +2793,8 @@
                                             <thead>
                                                 <tr>
                                                     <th>Client</th>
+                                                    <th>Invoice Date</th>
                                                     <th>Amount</th>
-                                                    <th>Date</th>
                                                     <th>Payment Terms</th>
                                                     <th>Actions</th>
                                                 </tr>
@@ -2658,8 +2803,8 @@
                                                 {invoices.map(invoice => (
                                                     <tr key={invoice.id}>
                                                         <td>{invoice.client}</td>
-                                                        <td>£{(parseFloat(invoice.totalAmount) || 0).toFixed(2)}</td>
-                                                        <td>{new Date(invoice.createdAt || invoice.date).toLocaleDateString()}</td>
+                                                        <td>{invoice.invoiceDate ? new Date(invoice.invoiceDate).toLocaleDateString('en-GB') : '-'}</td>
+                                                        <td>{formatCurrency(invoice.totalAmount)}</td>
                                                         <td>{invoice.paymentTerms?.replace('_', ' ') || 'N/A'}</td>
                                                         <td>
                                                             <div className="action-buttons">
@@ -2694,8 +2839,8 @@
                                             <thead>
                                                 <tr>
                                                     <th>Client</th>
+                                                    <th>Invoice Date</th>
                                                     <th>Amount</th>
-                                                    <th>Date</th>
                                                     <th>Paid Date</th>
                                                     <th>Actions</th>
                                                 </tr>
@@ -2704,9 +2849,9 @@
                                                 {paidInvoices.map(invoice => (
                                                     <tr key={invoice.id}>
                                                         <td>{invoice.client}</td>
-                                                        <td>£{(parseFloat(invoice.totalAmount) || 0).toFixed(2)}</td>
-                                                        <td>{new Date(invoice.createdAt || invoice.date).toLocaleDateString()}</td>
-                                                        <td>{new Date(invoice.paidAt || invoice.paidDate).toLocaleDateString()}</td>
+                                                        <td>{invoice.invoiceDate ? new Date(invoice.invoiceDate).toLocaleDateString('en-GB') : '-'}</td>
+                                                        <td>{formatCurrency(invoice.totalAmount)}</td>
+                                                        <td>{new Date(invoice.paidAt || invoice.paidDate).toLocaleDateString('en-GB')}</td>
                                                         <td>
                                                             <div className="action-buttons">
                                                                 <button className="btn btn-secondary" onClick={() => handleArchiveInvoice(invoice.id)}>
@@ -3124,6 +3269,7 @@
                                                 <thead>
                                                     <tr>
                                                         <th>Client</th>
+                                                        <th>Invoice Date</th>
                                                         <th>Amount</th>
                                                         <th>Archived Date</th>
                                                         <th>Actions</th>
@@ -3133,8 +3279,9 @@
                                                     {archivedInvoices.map(invoice => (
                                                         <tr key={invoice.id}>
                                                             <td>{invoice.client}</td>
-                                                            <td>£{(parseFloat(invoice.totalAmount) || 0).toFixed(2)}</td>
-                                                            <td>{new Date(invoice.archivedAt || invoice.archivedDate).toLocaleDateString()}</td>
+                                                            <td>{invoice.invoiceDate ? new Date(invoice.invoiceDate).toLocaleDateString('en-GB') : '-'}</td>
+                                                            <td>{formatCurrency(invoice.totalAmount)}</td>
+                                                            <td>{new Date(invoice.archivedAt || invoice.archivedDate).toLocaleDateString('en-GB')}</td>
                                                             <td>
                                                                 <div className="action-buttons">
                                                                     <button className="btn btn-secondary" onClick={() => handleUnarchiveInvoice(invoice.id)}>
@@ -3371,6 +3518,10 @@
                                     <input value={newInvoice.client} onChange={e => setNewInvoice({...newInvoice, client: e.target.value})} />
                                 </div>
                                 <div className="form-group">
+                                    <label>Invoice Date</label>
+                                    <input type="date" value={newInvoice.invoiceDate} onChange={e => setNewInvoice({...newInvoice, invoiceDate: e.target.value})} />
+                                </div>
+                                <div className="form-group">
                                     <label>Payment Terms</label>
                                     <select value={newInvoice.paymentTerms} onChange={e => setNewInvoice({...newInvoice, paymentTerms: e.target.value})}>
                                         <option value="now">Now</option>
@@ -3440,7 +3591,7 @@
                                                         />
                                                         <span>=</span>
                                                         <div className="invoice-amount">
-                                                            £{((parseFloat(section.rate) || 0) * (parseFloat(section.hours) || 0)).toFixed(2)}
+                                                            {formatCurrency((parseFloat(section.rate) || 0) * (parseFloat(section.hours) || 0))}
                                                         </div>
                                                     </>
                                                 ) : (
@@ -3453,7 +3604,7 @@
                                                             style={{flex: 2}}
                                                         />
                                                         <div className="invoice-amount">
-                                                            £{(parseFloat(section.amount) || 0).toFixed(2)}
+                                                            {formatCurrency(parseFloat(section.amount) || 0)}
                                                         </div>
                                                     </>
                                                 )}
@@ -3469,7 +3620,7 @@
                                     <div style={{display: 'flex', justifyContent: 'space-between', alignItems: 'center'}}>
                                         <div style={{fontSize: '20px', fontWeight: '700'}}>Total</div>
                                         <div style={{fontSize: '24px', fontWeight: '800', color: 'var(--mint-500)'}}>
-                                            £{calculateInvoiceTotal().toFixed(2)}
+                                            {formatCurrency(calculateInvoiceTotal())}
                                         </div>
                                     </div>
                                 </div>
@@ -3495,6 +3646,10 @@
                                     <input value={editingInvoice.client} onChange={e => setEditingInvoice({...editingInvoice, client: e.target.value})} />
                                 </div>
                                 <div className="form-group">
+                                    <label>Invoice Date</label>
+                                    <input type="date" value={editingInvoice.invoiceDate || ''} onChange={e => setEditingInvoice({...editingInvoice, invoiceDate: e.target.value})} />
+                                </div>
+                                <div className="form-group">
                                     <label>Payment Terms</label>
                                     <select value={editingInvoice.paymentTerms} onChange={e => setEditingInvoice({...editingInvoice, paymentTerms: e.target.value})}>
                                         <option value="now">Now</option>
@@ -3507,6 +3662,10 @@
                                         <option value="no">No</option>
                                         <option value="yes">Yes</option>
                                     </select>
+                                </div>
+                                <div className="form-group">
+                                    <label>Payment Deadline</label>
+                                    <input type="date" value={editingInvoice.paymentDeadline || ''} onChange={e => setEditingInvoice({...editingInvoice, paymentDeadline: e.target.value})} />
                                 </div>
                                 <div className="form-group">
                                     <label>Contact Name</label>
@@ -3560,7 +3719,7 @@
                                                         />
                                                         <span>=</span>
                                                         <div className="invoice-amount">
-                                                            £{((parseFloat(section.rate) || 0) * (parseFloat(section.hours) || 0)).toFixed(2)}
+                                                            {formatCurrency((parseFloat(section.rate) || 0) * (parseFloat(section.hours) || 0))}
                                                         </div>
                                                     </>
                                                 ) : (
@@ -3573,7 +3732,7 @@
                                                             style={{flex: 2}}
                                                         />
                                                         <div className="invoice-amount">
-                                                            £{(parseFloat(section.amount) || 0).toFixed(2)}
+                                                            {formatCurrency(parseFloat(section.amount) || 0)}
                                                         </div>
                                                     </>
                                                 )}
@@ -3589,7 +3748,7 @@
                                     <div style={{display: 'flex', justifyContent: 'space-between', alignItems: 'center'}}>
                                         <div style={{fontSize: '20px', fontWeight: '700'}}>Total</div>
                                         <div style={{fontSize: '24px', fontWeight: '800', color: 'var(--mint-500)'}}>
-                                            £{calculateInvoiceTotal().toFixed(2)}
+                                            {formatCurrency(calculateInvoiceTotal())}
                                         </div>
                                     </div>
                                 </div>

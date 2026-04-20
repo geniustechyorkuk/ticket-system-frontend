@@ -1730,6 +1730,8 @@
             });
             const [portalLinks, setPortalLinks] = useState([]);
             const [portalLinksDraft, setPortalLinksDraft] = useState([]);
+            const [ticketSearch, setTicketSearch] = useState('');
+            const [ticketSort, setTicketSort] = useState('deadline_asc');
 
             // Show alert
             const showAlert = (message, type = 'success') => {
@@ -2010,12 +2012,17 @@
                 setLoading(true);
                 try {
                     await api.completeTicket(selectedTicket.id, resolution);
+
                     const today = new Date().toISOString().slice(0, 10);
-                    setShowResolution(false);
                     setNewInvoice({
-                        ...getEmptyInvoice(),
                         client: selectedTicket.client || '',
-                        invoiceDate: today
+                        invoiceDate: today,
+                        paymentTerms: 'now',
+                        inQuickBooks: 'no',
+                        paymentDeadline: '',
+                        contactName: '',
+                        contactEmail: '',
+                        contactPhone: ''
                     });
                     setInvoiceSections([{
                         description: selectedTicket.task || '',
@@ -2024,11 +2031,13 @@
                         hours: '',
                         amount: ''
                     }]);
+
+                    setShowResolution(false);
                     setResolution('');
                     setSelectedTicket(null);
+                    await loadData();
                     setShowNewInvoice(true);
-                    showAlert('Ticket completed. Create invoice below.');
-                    loadData();
+                    showAlert('Ticket completed. New invoice opened.');
                 } catch (error) {
                     showAlert(error.message, 'error');
                 } finally {
@@ -2811,8 +2820,71 @@
                 );
             }
 
-            // My Tickets view
-            const myTickets = tickets.filter(t => t.assignedTo === currentUser.id);
+            const normalizeSearch = (value) => String(value || '').toLowerCase().trim();
+
+            const sortTickets = (items, sortBy = ticketSort) => {
+                const sorted = [...items];
+                sorted.sort((a, b) => {
+                    const dateA = a?.deadline ? new Date(a.deadline).getTime() : Number.MAX_SAFE_INTEGER;
+                    const dateB = b?.deadline ? new Date(b.deadline).getTime() : Number.MAX_SAFE_INTEGER;
+                    const clientA = String(a?.client || '').toLowerCase();
+                    const clientB = String(b?.client || '').toLowerCase();
+                    if (sortBy === 'client_asc') return clientA.localeCompare(clientB);
+                    if (sortBy === 'client_desc') return clientB.localeCompare(clientA);
+                    if (sortBy === 'deadline_desc') return dateB - dateA;
+                    return dateA - dateB;
+                });
+                return sorted;
+            };
+
+            const matchesTicketSearch = (ticket, term = ticketSearch) => {
+                const q = normalizeSearch(term);
+                if (!q) return true;
+                return [
+                    ticket?.client,
+                    ticket?.task,
+                    ticket?.description,
+                    ticket?.resolution,
+                    ticket?.assignedToName,
+                    ticket?.location,
+                    ticket?.urgency
+                ].some(value => normalizeSearch(value).includes(q));
+            };
+
+            const applyTicketFilters = (items) => sortTickets(items.filter(ticket => matchesTicketSearch(ticket)));
+
+            const uniqueTicketsMap = new Map();
+            [...tickets, ...completedTickets, ...archivedTickets].forEach(ticket => {
+                if (ticket?.id && !uniqueTicketsMap.has(ticket.id)) uniqueTicketsMap.set(ticket.id, ticket);
+            });
+            const allTickets = Array.from(uniqueTicketsMap.values()).map(ticket => ({
+                ...ticket,
+                statusLabel: ticket.archivedDate ? 'Archived' : ticket.completedDate ? 'Completed' : (ticket.deadline && new Date(ticket.deadline) < new Date() ? 'Overdue' : 'Active')
+            }));
+
+            const activeTicketsFiltered = applyTicketFilters(tickets);
+            const completedTicketsFiltered = applyTicketFilters(completedTickets);
+            const overdueTicketsFiltered = applyTicketFilters(overdueTickets);
+            const archivedTicketsFiltered = applyTicketFilters(archivedTickets);
+            const myTickets = applyTicketFilters(tickets.filter(t => String(t.assignedTo) === String(currentUser.id)));
+            const searchedTickets = ticketSearch ? sortTickets(allTickets.filter(ticket => matchesTicketSearch(ticket))) : [];
+
+            const renderTicketControls = () => (
+                <div style={{display: 'flex', gap: '12px', flexWrap: 'wrap', marginBottom: '18px'}}>
+                    <input
+                        style={{flex: '1 1 320px'}}
+                        placeholder="Search all tickets, including archived..."
+                        value={ticketSearch}
+                        onChange={e => setTicketSearch(e.target.value)}
+                    />
+                    <select style={{maxWidth: '220px'}} value={ticketSort} onChange={e => setTicketSort(e.target.value)}>
+                        <option value="deadline_asc">Deadline: Oldest first</option>
+                        <option value="deadline_desc">Deadline: Newest first</option>
+                        <option value="client_asc">Client: A-Z</option>
+                        <option value="client_desc">Client: Z-A</option>
+                    </select>
+                </div>
+            );
             
             // Handle navigation click - close sidebar on mobile
             const handleNavClick = (view) => {
@@ -2958,6 +3030,37 @@
                             </div>
 
                             <div className="content-area">
+                                {['tickets', 'mytickets', 'overdue', 'completed', 'archived'].includes(currentView) && ticketSearch && (
+                                    <div className="card" style={{marginBottom: '24px'}}>
+                                        <div className="card-header">
+                                            <div className="card-title">Search Results Across All Tickets</div>
+                                            <div style={{fontSize: '14px', color: 'var(--text-secondary)'}}>{searchedTickets.length} match(es)</div>
+                                        </div>
+                                        {renderTicketControls()}
+                                        <table>
+                                            <thead>
+                                                <tr>
+                                                    <th>Client</th>
+                                                    <th>Task</th>
+                                                    <th>Status</th>
+                                                    <th>Deadline</th>
+                                                    <th>Assigned To</th>
+                                                </tr>
+                                            </thead>
+                                            <tbody>
+                                                {searchedTickets.map(ticket => (
+                                                    <tr key={`search-${ticket.id}`} style={{cursor: 'pointer'}} onClick={() => { setDetailTicket(ticket); setShowTicketDetail(true); }}>
+                                                        <td>{ticket.client}</td>
+                                                        <td>{ticket.task}</td>
+                                                        <td>{ticket.statusLabel}</td>
+                                                        <td>{ticket.deadline ? new Date(ticket.deadline).toLocaleDateString('en-GB') : 'N/A'}</td>
+                                                        <td>{ticket.assignedToName || 'Unassigned'}</td>
+                                                    </tr>
+                                                ))}
+                                            </tbody>
+                                        </table>
+                                    </div>
+                                )}
                                 {/* Dashboard View */}
                                 {currentView === 'dashboard' && (
                                     <>
@@ -3210,6 +3313,7 @@
                                                 + New Ticket
                                             </button>
                                         </div>
+                                        {renderTicketControls()}
                                         <table>
                                             <thead>
                                                 <tr>
@@ -3222,7 +3326,7 @@
                                                 </tr>
                                             </thead>
                                             <tbody>
-                                                {tickets.map(ticket => (
+                                                {activeTicketsFiltered.map(ticket => (
                                                     <tr key={ticket.id} style={{cursor: 'pointer'}} onClick={() => { setDetailTicket(ticket); setShowTicketDetail(true); }}>
                                                         <td>{ticket.client}</td>
                                                         <td>{ticket.task}</td>
@@ -3265,6 +3369,7 @@
                                         <div className="card-header">
                                             <div className="card-title">My Tickets</div>
                                         </div>
+                                        {renderTicketControls()}
                                         <table>
                                             <thead>
                                                 <tr>
@@ -3312,6 +3417,7 @@
                                         <div className="card-header">
                                             <div className="card-title">Overdue Tickets</div>
                                         </div>
+                                        {renderTicketControls()}
                                         <table>
                                             <thead>
                                                 <tr>
@@ -3324,7 +3430,7 @@
                                                 </tr>
                                             </thead>
                                             <tbody>
-                                                {overdueTickets.map(ticket => {
+                                                {overdueTicketsFiltered.map(ticket => {
                                                     const daysOverdue = Math.floor((new Date() - new Date(ticket.deadline)) / (1000 * 60 * 60 * 24));
                                                     return (
                                                         <tr key={ticket.id} style={{background: 'rgba(255, 139, 148, 0.1)', cursor: 'pointer'}} onClick={() => { setDetailTicket(ticket); setShowTicketDetail(true); }}>
@@ -3360,6 +3466,7 @@
                                         <div className="card-header">
                                             <div className="card-title">Completed Tickets</div>
                                         </div>
+                                        {renderTicketControls()}
                                         <table>
                                             <thead>
                                                 <tr>
@@ -3371,7 +3478,7 @@
                                                 </tr>
                                             </thead>
                                             <tbody>
-                                                {completedTickets.map(ticket => (
+                                                {completedTicketsFiltered.map(ticket => (
                                                     <tr key={ticket.id} style={{cursor: 'pointer'}} onClick={() => { setDetailTicket(ticket); setShowTicketDetail(true); }}>
                                                         <td>{ticket.client}</td>
                                                         <td>{ticket.task}</td>
@@ -3929,6 +4036,7 @@
                                             <div className="card-header">
                                                 <div className="card-title">Archived Tickets</div>
                                             </div>
+                                            {renderTicketControls()}
                                             <table>
                                                 <thead>
                                                     <tr>
@@ -3939,7 +4047,7 @@
                                                     </tr>
                                                 </thead>
                                                 <tbody>
-                                                    {archivedTickets.map(ticket => (
+                                                    {archivedTicketsFiltered.map(ticket => (
                                                         <tr key={ticket.id} style={{cursor: 'pointer'}} onClick={() => { setDetailTicket(ticket); setShowTicketDetail(true); }}>
                                                             <td>{ticket.client}</td>
                                                             <td>{ticket.task}</td>

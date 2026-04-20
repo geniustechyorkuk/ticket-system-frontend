@@ -1353,7 +1353,17 @@
             letter-spacing: 0.08em;
             text-transform: uppercase;
             color: var(--text-primary);
-            line-height: 1.35;
+            line-height: 1.25;
+        }
+
+        .shortcut-category {
+            font-size: 11px;
+            font-weight: 800;
+            letter-spacing: 0.1em;
+            text-transform: uppercase;
+            color: var(--logo-blue);
+            line-height: 1.2;
+            margin-top: -4px;
         }
 
         .shortcut-empty {
@@ -1378,6 +1388,10 @@
 
             .shortcut-label {
                 font-size: 12px;
+            }
+
+            .shortcut-category {
+                font-size: 10px;
             }
         }
 
@@ -1717,7 +1731,7 @@
                 setAlert({ message, type });
             };
 
-            const createEmptyPortalLink = () => ({ label: '', url: '' });
+            const createEmptyPortalLink = () => ({ label: '', category: '', url: '', sortOrder: 0 });
 
             const normalizePortalUrl = (value) => {
                 if (!value) return '';
@@ -1747,12 +1761,28 @@
             };
 
             const removePortalLinkDraft = (index) => {
-                setPortalLinksDraft(prev => prev.filter((_, i) => i !== index));
+                setPortalLinksDraft(prev => prev.filter((_, i) => i !== index).map((link, idx) => ({ ...link, sortOrder: idx })));
+            };
+
+            const movePortalLinkDraft = (index, direction) => {
+                setPortalLinksDraft(prev => {
+                    const targetIndex = index + direction;
+                    if (targetIndex < 0 || targetIndex >= prev.length) return prev;
+                    const next = [...prev];
+                    const [item] = next.splice(index, 1);
+                    next.splice(targetIndex, 0, item);
+                    return next.map((link, idx) => ({ ...link, sortOrder: idx }));
+                });
             };
 
             const handleSavePortalLinks = async () => {
                 const cleaned = portalLinksDraft
-                    .map(item => ({ label: (item.label || '').trim(), url: normalizePortalUrl(item.url || '') }))
+                    .map((item, index) => ({
+                        label: (item.label || '').trim(),
+                        category: (item.category || '').trim(),
+                        url: normalizePortalUrl(item.url || ''),
+                        sortOrder: Number.isFinite(Number(item.sortOrder)) ? Number(item.sortOrder) : index
+                    }))
                     .filter(item => item.label && item.url);
 
                 if (portalLinksDraft.length > 0 && cleaned.length === 0) {
@@ -1827,8 +1857,8 @@
                         activeInvoices: activeInvoices.length
                     });
                     
-                    setPortalLinks(Array.isArray(portalLinksData) ? portalLinksData : []);
-                    setPortalLinksDraft(Array.isArray(portalLinksData) ? portalLinksData : []);
+                    setPortalLinks(Array.isArray(portalLinksData) ? portalLinksData.map((link, index) => ({ ...link, sortOrder: Number.isFinite(Number(link.sortOrder)) ? Number(link.sortOrder) : index })) : []);
+                    setPortalLinksDraft(Array.isArray(portalLinksData) ? portalLinksData.map((link, index) => ({ ...link, sortOrder: Number.isFinite(Number(link.sortOrder)) ? Number(link.sortOrder) : index })) : []);
                     if (currentUser.role !== 'staff') setUsers(usersData);
                 } catch (error) {
                     showAlert(error.message, 'error');
@@ -2361,6 +2391,18 @@
 
                 // Map exported Tickets sheet rows to backend-expected format
                 const rawTickets = jsonData.Tickets || jsonData.tickets || [];
+                const rawPortalLinks = jsonData['Website Tiles'] || jsonData.websiteTiles || jsonData['Portal Links'] || jsonData.portalLinks || [];
+                const portalLinks = rawPortalLinks
+                    .filter(row => row.Label || row.label || row.URL || row.url)
+                    .map((row, index) => ({
+                        label: row.Label || row.label || '',
+                        category: row.Category || row.category || '',
+                        url: normalizePortalUrl(row.URL || row.Url || row.url || ''),
+                        sortOrder: Number.isFinite(Number(row['Sort Order'] || row.sortOrder)) ? Number(row['Sort Order'] || row.sortOrder) : index,
+                        enabled: String(row.Enabled || row.enabled || 'true').toLowerCase() !== 'false'
+                    }))
+                    .filter(row => row.label && row.url);
+
                 const tickets = rawTickets
                     .filter(row => row.Client || row.client)
                     .map(row => ({
@@ -2394,15 +2436,15 @@
                     }))
                     .filter(row => row.client);
 
-                if (tickets.length === 0 && invoices.length === 0) {
-                    return showAlert('No valid tickets or invoices found in this file. Make sure you are uploading a file exported from this system.', 'error');
+                if (tickets.length === 0 && invoices.length === 0 && portalLinks.length === 0) {
+                    return showAlert('No valid tickets, invoices or website tiles found in this file. Make sure you are uploading a file exported from this system.', 'error');
                 }
 
                 setLoading(true);
                 try {
                     const response = await api.request('/data/import', {
                         method: 'POST',
-                        body: JSON.stringify({ tickets, invoices })
+                        body: JSON.stringify({ tickets, invoices, portalLinks })
                     });
                     showAlert(response.message || 'Import successful!');
                     loadData();
@@ -2555,6 +2597,18 @@
                     if (invoiceDetailsData.length > 0) {
                         const detailsSheet = XLSX.utils.json_to_sheet(invoiceDetailsData);
                         XLSX.utils.book_append_sheet(wb, detailsSheet, 'Invoice Details');
+                    }
+
+                    const websiteTilesData = (data.portalLinks || []).map((link, index) => ({
+                        'Sort Order': Number.isFinite(Number(link.sortOrder)) ? Number(link.sortOrder) : index,
+                        'Label': link.label || '',
+                        'Category': link.category || '',
+                        'URL': link.url || '',
+                        'Enabled': link.enabled !== false ? 'TRUE' : 'FALSE'
+                    }));
+                    if (websiteTilesData.length > 0) {
+                        const websiteTilesSheet = XLSX.utils.json_to_sheet(websiteTilesData);
+                        XLSX.utils.book_append_sheet(wb, websiteTilesSheet, 'Website Tiles');
                     }
 
                     // Users sheet
@@ -2822,7 +2876,7 @@
                                                         <div className="shortcut-icon-wrap">
                                                             <img src={getPortalLinkIcon(link.url)} alt={`${link.label} icon`} />
                                                         </div>
-                                                        <div className="shortcut-label">{link.label}</div>
+                                                        <div className="shortcut-label">{link.label}</div>{link.category ? <div className="shortcut-category">{String(link.category).toUpperCase()}</div> : null}
                                                     </div>
                                                 ))}
                                             </div>
@@ -3660,7 +3714,7 @@
 
                                                         {portalLinksDraft.map((link, index) => (
                                                             <div key={index} style={{padding: '16px', background: 'var(--bg-secondary)', border: '1px solid var(--border-color)', borderRadius: '12px', boxShadow: 'var(--shadow)'}}>
-                                                                <div style={{display: 'grid', gridTemplateColumns: 'minmax(0, 1fr) minmax(0, 1.4fr) auto', gap: '12px', alignItems: 'end'}}>
+                                                                <div style={{display: 'grid', gridTemplateColumns: 'minmax(0, 1fr) minmax(0, 1fr) minmax(0, 1.4fr) auto', gap: '12px', alignItems: 'end'}}>
                                                                     <div>
                                                                         <label className="form-label">Label</label>
                                                                         <input
@@ -3668,6 +3722,15 @@
                                                                             value={link.label || ''}
                                                                             onChange={e => handlePortalLinkDraftChange(index, 'label', e.target.value)}
                                                                             placeholder="Example: QUICKBOOKS"
+                                                                        />
+                                                                    </div>
+                                                                    <div>
+                                                                        <label className="form-label">Category</label>
+                                                                        <input
+                                                                            type="text"
+                                                                            value={link.category || ''}
+                                                                            onChange={e => handlePortalLinkDraftChange(index, 'category', e.target.value)}
+                                                                            placeholder="Example: FINANCE"
                                                                         />
                                                                     </div>
                                                                     <div>
@@ -3679,9 +3742,13 @@
                                                                             placeholder="https://example.com"
                                                                         />
                                                                     </div>
-                                                                    <button className="btn btn-danger" onClick={() => removePortalLinkDraft(index)} style={{height: '46px'}}>
-                                                                        <Icon name="trash" size={14} /> Remove
-                                                                    </button>
+                                                                    <div style={{display: 'flex', gap: '8px', flexWrap: 'wrap'}}>
+                                                                        <button className="btn btn-secondary" onClick={() => movePortalLinkDraft(index, -1)} style={{height: '46px', paddingInline: '12px'}} disabled={index === 0}>▲</button>
+                                                                        <button className="btn btn-secondary" onClick={() => movePortalLinkDraft(index, 1)} style={{height: '46px', paddingInline: '12px'}} disabled={index === portalLinksDraft.length - 1}>▼</button>
+                                                                        <button className="btn btn-danger" onClick={() => removePortalLinkDraft(index)} style={{height: '46px'}}>
+                                                                            <Icon name="trash" size={14} /> Remove
+                                                                        </button>
+                                                                    </div>
                                                                 </div>
                                                                 <div style={{display: 'flex', alignItems: 'center', gap: '12px', marginTop: '12px', padding: '12px 14px', borderRadius: '10px', background: 'var(--bg-subtle)'}}>
                                                                     {normalizePortalUrl(link.url) ? (
@@ -3693,7 +3760,8 @@
                                                                     )}
                                                                     <div style={{minWidth: 0}}>
                                                                         <div style={{fontWeight: '800', fontSize: '13px', letterSpacing: '0.08em', color: 'var(--text-primary)'}}>{(link.label || 'TILE LABEL').toUpperCase()}</div>
-                                                                        <div style={{fontSize: '12px', color: 'var(--text-secondary)', overflow: 'hidden', textOverflow: 'ellipsis'}}>{normalizePortalUrl(link.url) || 'https://example.com'}</div>
+                                                                        <div style={{fontWeight: '800', fontSize: '12px', letterSpacing: '0.08em', color: 'var(--logo-blue)', marginTop: '2px'}}>{(link.category || 'CATEGORY').toUpperCase()}</div>
+                                                                        <div style={{fontSize: '12px', color: 'var(--text-secondary)', overflow: 'hidden', textOverflow: 'ellipsis', marginTop: '4px'}}>{normalizePortalUrl(link.url) || 'https://example.com'}</div>
                                                                     </div>
                                                                 </div>
                                                             </div>

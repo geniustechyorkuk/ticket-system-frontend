@@ -4492,7 +4492,9 @@
                                     <label>Assign To</label>
                                     <select value={newTicket.assignedTo} onChange={e => setNewTicket({...newTicket, assignedTo: e.target.value})}>
                                         <option value="">Unassigned</option>
-                                        {users.filter(u => u.role === 'staff' || u.role === 'admin').map(u => (
+                                        {users
+                                            .filter(u => u && u.id && u.name)
+                                            .map(u => (
                                             <option key={u.id} value={u.id}>{u.name}</option>
                                         ))}
                                     </select>
@@ -4545,7 +4547,9 @@
                                     <label>Assign To</label>
                                     <select value={editingTicket.assignedTo || ''} onChange={e => setEditingTicket({...editingTicket, assignedTo: e.target.value})}>
                                         <option value="">Unassigned</option>
-                                        {users.filter(u => u.role === 'staff' || u.role === 'admin').map(u => (
+                                        {users
+                                            .filter(u => u && u.id && u.name)
+                                            .map(u => (
                                             <option key={u.id} value={u.id}>{u.name}</option>
                                         ))}
                                     </select>

@@ -1706,7 +1706,7 @@
             });
             const [invoiceSections, setInvoiceSections] = useState([{ description: '', type: 'hourly', rate: '', hours: '', amount: '' }]);
             const [newInvoice, setNewInvoice] = useState({
-                client: '', paymentTerms: 'now', inQuickBooks: 'no', paymentDeadline: '', contactName: '', contactEmail: '', contactPhone: ''
+                client: '', invoiceDate: '', paymentTerms: 'now', inQuickBooks: 'no', paymentDeadline: '', contactName: '', contactEmail: '', contactPhone: ''
             });
             const [newStaff, setNewStaff] = useState({
                 username: '', password: '', role: 'staff', firstName: '', lastName: '', email: ''
@@ -1829,7 +1829,7 @@
                         api.getInvoices('archived'),
                         api.getStats(),
                         api.getPortalLinks(),
-                        currentUser.role !== 'staff' ? api.getUsers() : Promise.resolve([])
+                        api.getUsers()
                     ]);
 
                     setTickets(activeTickets);
@@ -1859,7 +1859,7 @@
                     
                     setPortalLinks(Array.isArray(portalLinksData) ? portalLinksData.map((link, index) => ({ ...link, sortOrder: Number.isFinite(Number(link.sortOrder)) ? Number(link.sortOrder) : index })) : []);
                     setPortalLinksDraft(Array.isArray(portalLinksData) ? portalLinksData.map((link, index) => ({ ...link, sortOrder: Number.isFinite(Number(link.sortOrder)) ? Number(link.sortOrder) : index })) : []);
-                    if (currentUser.role !== 'staff') setUsers(usersData);
+                    setUsers(Array.isArray(usersData) ? usersData : []);
                 } catch (error) {
                     showAlert(error.message, 'error');
                 } finally {
@@ -2063,7 +2063,7 @@
                     });
                     showAlert('Invoice created successfully!');
                     setShowNewInvoice(false);
-                    setNewInvoice({ client: '', paymentTerms: 'now', inQuickBooks: 'no', paymentDeadline: '', contactName: '', contactEmail: '', contactPhone: '' });
+                    setNewInvoice({ client: '', invoiceDate: '', paymentTerms: 'now', inQuickBooks: 'no', paymentDeadline: '', contactName: '', contactEmail: '', contactPhone: '' });
                     setInvoiceSections([{ description: '', type: 'hourly', rate: '', hours: '', amount: '' }]);
                     loadData();
                 } catch (error) {
@@ -2087,6 +2087,7 @@
                 try {
                     await api.updateInvoice(editingInvoice.id, {
                         client: editingInvoice.client,
+                        invoiceDate: editingInvoice.invoiceDate || '',
                         paymentTerms: editingInvoice.paymentTerms,
                         inQuickBooks: editingInvoice.inQuickBooks,
                         paymentDeadline: editingInvoice.paymentDeadline,
@@ -4124,6 +4125,10 @@
                                     <input value={newInvoice.client} onChange={e => setNewInvoice({...newInvoice, client: e.target.value})} />
                                 </div>
                                 <div className="form-group">
+                                    <label>Invoice Date</label>
+                                    <input type="date" value={newInvoice.invoiceDate || ''} onChange={e => setNewInvoice({...newInvoice, invoiceDate: e.target.value})} />
+                                </div>
+                                <div className="form-group">
                                     <label>Payment Terms</label>
                                     <select value={newInvoice.paymentTerms} onChange={e => setNewInvoice({...newInvoice, paymentTerms: e.target.value})}>
                                         <option value="now">Now</option>
@@ -4246,6 +4251,10 @@
                                 <div className="form-group">
                                     <label>Client Name *</label>
                                     <input value={editingInvoice.client} onChange={e => setEditingInvoice({...editingInvoice, client: e.target.value})} />
+                                </div>
+                                <div className="form-group">
+                                    <label>Invoice Date</label>
+                                    <input type="date" value={editingInvoice.invoiceDate || ''} onChange={e => setEditingInvoice({...editingInvoice, invoiceDate: e.target.value})} />
                                 </div>
                                 <div className="form-group">
                                     <label>Payment Terms</label>

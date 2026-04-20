@@ -1798,10 +1798,7 @@
                         api.getInvoices('paid'),
                         api.getInvoices('archived'),
                         api.getStats(),
-                        api.getPortalLinks().catch((error) => {
-                            console.warn('Portal links unavailable:', error.message);
-                            return [];
-                        }),
+                        api.getPortalLinks(),
                         currentUser.role !== 'staff' ? api.getUsers() : Promise.resolve([])
                     ]);
 
@@ -3640,6 +3637,77 @@
                                                             Selected: <strong>{importFile.name}</strong> ({Math.round(importFile.size / 1024)} KB)
                                                         </div>
                                                     )}
+                                                </div>
+                                            )}
+
+
+                                            {/* WEBSITE TILES TAB */}
+                                            {dataSubTab === 'links' && (
+                                                <div>
+                                                    <div style={{marginBottom: '20px', padding: '16px', background: 'rgba(110, 181, 255, 0.1)', borderRadius: '8px', border: '1px solid rgba(110, 181, 255, 0.3)'}}>
+                                                        <h4 style={{margin: '0 0 8px 0', color: 'var(--logo-blue)', display: 'flex', alignItems: 'center', gap: '8px'}}><Icon name="settings" size={16} /> Website Tiles</h4>
+                                                        <p style={{margin: 0, fontSize: '14px', color: 'var(--text-secondary)'}}>
+                                                            Add shortcut tiles that appear above the dashboard cards for all users. Only the owner can edit them.
+                                                        </p>
+                                                    </div>
+
+                                                    <div style={{display: 'flex', flexDirection: 'column', gap: '14px'}}>
+                                                        {portalLinksDraft.length === 0 && (
+                                                            <div style={{padding: '18px', background: 'var(--bg-subtle)', border: '1px dashed var(--border-color)', borderRadius: '12px', color: 'var(--text-secondary)'}}>
+                                                                No website tiles added yet. Click <strong>Add Tile</strong> to create your first shortcut.
+                                                            </div>
+                                                        )}
+
+                                                        {portalLinksDraft.map((link, index) => (
+                                                            <div key={index} style={{padding: '16px', background: 'var(--bg-secondary)', border: '1px solid var(--border-color)', borderRadius: '12px', boxShadow: 'var(--shadow)'}}>
+                                                                <div style={{display: 'grid', gridTemplateColumns: 'minmax(0, 1fr) minmax(0, 1.4fr) auto', gap: '12px', alignItems: 'end'}}>
+                                                                    <div>
+                                                                        <label className="form-label">Label</label>
+                                                                        <input
+                                                                            type="text"
+                                                                            value={link.label || ''}
+                                                                            onChange={e => handlePortalLinkDraftChange(index, 'label', e.target.value)}
+                                                                            placeholder="Example: QUICKBOOKS"
+                                                                        />
+                                                                    </div>
+                                                                    <div>
+                                                                        <label className="form-label">Website URL</label>
+                                                                        <input
+                                                                            type="text"
+                                                                            value={link.url || ''}
+                                                                            onChange={e => handlePortalLinkDraftChange(index, 'url', e.target.value)}
+                                                                            placeholder="https://example.com"
+                                                                        />
+                                                                    </div>
+                                                                    <button className="btn btn-danger" onClick={() => removePortalLinkDraft(index)} style={{height: '46px'}}>
+                                                                        <Icon name="trash" size={14} /> Remove
+                                                                    </button>
+                                                                </div>
+                                                                <div style={{display: 'flex', alignItems: 'center', gap: '12px', marginTop: '12px', padding: '12px 14px', borderRadius: '10px', background: 'var(--bg-subtle)'}}>
+                                                                    {normalizePortalUrl(link.url) ? (
+                                                                        <img src={getPortalLinkIcon(link.url)} alt="Site icon" style={{width: '24px', height: '24px', borderRadius: '6px', flexShrink: 0}} onError={e => { e.currentTarget.style.display = 'none'; }} />
+                                                                    ) : (
+                                                                        <div style={{width: '24px', height: '24px', borderRadius: '6px', background: 'rgba(26, 111, 161, 0.12)', display: 'flex', alignItems: 'center', justifyContent: 'center', color: 'var(--logo-blue)', flexShrink: 0}}>
+                                                                            <Icon name="dashboard" size={12} />
+                                                                        </div>
+                                                                    )}
+                                                                    <div style={{minWidth: 0}}>
+                                                                        <div style={{fontWeight: '800', fontSize: '13px', letterSpacing: '0.08em', color: 'var(--text-primary)'}}>{(link.label || 'TILE LABEL').toUpperCase()}</div>
+                                                                        <div style={{fontSize: '12px', color: 'var(--text-secondary)', overflow: 'hidden', textOverflow: 'ellipsis'}}>{normalizePortalUrl(link.url) || 'https://example.com'}</div>
+                                                                    </div>
+                                                                </div>
+                                                            </div>
+                                                        ))}
+                                                    </div>
+
+                                                    <div style={{display: 'flex', gap: '12px', marginTop: '20px', flexWrap: 'wrap'}}>
+                                                        <button className="btn btn-secondary" onClick={addPortalLinkDraft}>
+                                                            <Icon name="plus" size={14} /> Add Tile
+                                                        </button>
+                                                        <button className="btn btn-primary" onClick={handleSavePortalLinks}>
+                                                            <Icon name="check" size={14} /> Save Website Tiles
+                                                        </button>
+                                                    </div>
                                                 </div>
                                             )}
 

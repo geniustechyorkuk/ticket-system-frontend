@@ -1300,11 +1300,76 @@
             transition: background-color 5000s ease-in-out 0s;
         }
 
+        .dashboard-hero {
+            display: grid;
+            grid-template-columns: minmax(0, 1.15fr) minmax(360px, 0.85fr);
+            gap: 24px;
+            align-items: stretch;
+            margin-bottom: 24px;
+        }
+
+        .calendar-panel,
+        .shortcut-panel {
+            background: var(--bg-secondary);
+            border: 1px solid var(--border-color);
+            box-shadow: var(--shadow);
+            border-radius: 20px;
+            overflow: hidden;
+            min-height: 100%;
+        }
+
+        .calendar-panel-header,
+        .shortcut-panel-header {
+            padding: 18px 20px 14px;
+            border-bottom: 1px solid var(--border-color);
+            display: flex;
+            justify-content: space-between;
+            align-items: flex-start;
+            gap: 16px;
+        }
+
+        .calendar-panel-title,
+        .shortcut-panel-title {
+            font-size: 17px;
+            font-weight: 800;
+            color: var(--text-primary);
+            margin-bottom: 4px;
+        }
+
+        .calendar-panel-copy,
+        .shortcut-panel-copy {
+            font-size: 13px;
+            color: var(--text-secondary);
+            line-height: 1.45;
+        }
+
+        .calendar-panel-link {
+            white-space: nowrap;
+            text-decoration: none;
+        }
+
+        .calendar-frame-wrap {
+            padding: 0;
+            background: linear-gradient(180deg, rgba(26,111,161,0.02), rgba(26,111,161,0.05));
+        }
+
+        .calendar-frame {
+            width: 100%;
+            height: 430px;
+            border: 0;
+            display: block;
+            background: #fff;
+        }
+
+        .shortcut-panel-body {
+            padding: 18px;
+        }
+
         .shortcut-grid {
             display: grid;
             grid-template-columns: repeat(auto-fit, minmax(140px, 1fr));
             gap: 16px;
-            margin-bottom: 24px;
+            margin-bottom: 0;
         }
 
         .shortcut-tile {
@@ -1375,7 +1440,30 @@
             margin-bottom: 24px;
         }
 
+        @media (max-width: 1100px) {
+            .dashboard-hero {
+                grid-template-columns: 1fr;
+            }
+        }
+
         @media (max-width: 768px) {
+            .dashboard-hero {
+                gap: 16px;
+            }
+
+            .calendar-panel-header,
+            .shortcut-panel-header {
+                padding: 16px;
+            }
+
+            .shortcut-panel-body {
+                padding: 14px;
+            }
+
+            .calendar-frame {
+                height: 360px;
+            }
+
             .shortcut-grid {
                 grid-template-columns: repeat(2, minmax(0, 1fr));
                 gap: 12px;
@@ -1794,6 +1882,8 @@
                 if (!safeUrl) return;
                 window.open(safeUrl, '_blank', 'noopener,noreferrer');
             };
+
+            const sharedCalendarUrl = 'https://outlook.office365.com/owa/calendar/d649a2bc1e464ee89bd2e5bcb4b98483@geniustech.co.uk/8b1758825fa44e68802443a1ee577ab313257925209304360992/calendar.html';
 
             const handlePortalLinkDraftChange = (index, field, value) => {
                 setPortalLinksDraft(prev => prev.map((item, i) => i === index ? { ...item, [field]: value } : item));
@@ -3064,20 +3154,53 @@
                                 {/* Dashboard View */}
                                 {currentView === 'dashboard' && (
                                     <>
-                                        {portalLinks.length > 0 ? (
-                                            <div className="shortcut-grid">
-                                                {portalLinks.map((link, index) => (
-                                                    <div key={`${link.url}-${index}`} className="shortcut-tile" onClick={() => openPortalLink(link.url)} title={normalizePortalUrl(link.url)}>
-                                                        <div className="shortcut-icon-wrap">
-                                                            <img src={getPortalLinkIcon(link.url)} alt={`${link.label} icon`} />
-                                                        </div>
-                                                        <div className="shortcut-label">{link.label}</div>{link.category ? <div className="shortcut-category">{String(link.category).toUpperCase()}</div> : null}
+                                        <div className="dashboard-hero">
+                                            <div className="calendar-panel">
+                                                <div className="calendar-panel-header">
+                                                    <div>
+                                                        <div className="calendar-panel-title">30 Day Calendar View</div>
+                                                        <div className="calendar-panel-copy">Shared Outlook calendar view for upcoming scheduling, planning and workload visibility.</div>
                                                     </div>
-                                                ))}
+                                                    <a className="btn btn-secondary calendar-panel-link" href={sharedCalendarUrl} target="_blank" rel="noopener noreferrer">Open Calendar</a>
+                                                </div>
+                                                <div className="calendar-frame-wrap">
+                                                    <iframe
+                                                        className="calendar-frame"
+                                                        src={sharedCalendarUrl}
+                                                        title="Genius IT Solutions shared calendar"
+                                                        loading="lazy"
+                                                        referrerPolicy="no-referrer"
+                                                    />
+                                                </div>
                                             </div>
-                                        ) : currentUser.role === 'owner' ? (
-                                            <div className="shortcut-empty">You have no website shortcut tiles yet. Open <strong>Data Management → Website Tiles</strong> to add them.</div>
-                                        ) : null}
+
+                                            <div className="shortcut-panel">
+                                                <div className="shortcut-panel-header">
+                                                    <div>
+                                                        <div className="shortcut-panel-title">Quick Access Tiles</div>
+                                                        <div className="shortcut-panel-copy">Frequently used systems, portals and supplier tools for the team.</div>
+                                                    </div>
+                                                </div>
+                                                <div className="shortcut-panel-body">
+                                                    {portalLinks.length > 0 ? (
+                                                        <div className="shortcut-grid">
+                                                            {portalLinks.map((link, index) => (
+                                                                <div key={`${link.url}-${index}`} className="shortcut-tile" onClick={() => openPortalLink(link.url)} title={normalizePortalUrl(link.url)}>
+                                                                    <div className="shortcut-icon-wrap">
+                                                                        <img src={getPortalLinkIcon(link.url)} alt={`${link.label} icon`} />
+                                                                    </div>
+                                                                    <div className="shortcut-label">{link.label}</div>{link.category ? <div className="shortcut-category">{String(link.category).toUpperCase()}</div> : null}
+                                                                </div>
+                                                            ))}
+                                                        </div>
+                                                    ) : currentUser.role === 'owner' ? (
+                                                        <div className="shortcut-empty" style={{marginBottom: 0}}>You have no website shortcut tiles yet. Open <strong>Data Management → Website Tiles</strong> to add them.</div>
+                                                    ) : (
+                                                        <div className="shortcut-empty" style={{marginBottom: 0}}>No quick access tiles available yet.</div>
+                                                    )}
+                                                </div>
+                                            </div>
+                                        </div>
 
                                         <div className="stats-grid">
                                             <div className="stat-card" style={{cursor: 'pointer'}} onClick={() => handleNavClick('tickets')}>

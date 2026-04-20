@@ -1658,33 +1658,21 @@
 
         // API Helper Functions
         const api = {
-            // Get auth token
-            getToken: () => localStorage.getItem('token'),
-            
-            // Set auth token
-            setToken: (token) => localStorage.setItem('token', token),
-            
-            // Remove auth token
-            removeToken: () => localStorage.removeItem('token'),
-            
             // Make authenticated request
             request: async (endpoint, options = {}) => {
-                const token = api.getToken();
                 const headers = {
                     'Content-Type': 'application/json',
-                    ...(token && { 'Authorization': `Bearer ${token}` }),
                     ...options.headers
                 };
 
                 try {
                     const response = await fetch(`${API_URL}${endpoint}`, {
                         ...options,
+                        credentials: 'include',
                         headers
                     });
 
                     if (response.status === 401) {
-                        api.removeToken();
-                        window.location.reload();
                         return null;
                     }
 
@@ -1707,6 +1695,8 @@
                     method: 'POST',
                     body: JSON.stringify({ username, password })
                 }),
+            logout: () => api.request('/auth/logout', { method: 'POST' }),
+            getSession: () => api.request('/auth/session', { method: 'GET' }),
 
             // Tickets
             getTickets: (status) => 
@@ -2181,24 +2171,15 @@
 
             // Check for existing session
             useEffect(() => {
-                const token = api.getToken();
-                if (token) {
-                    // Token exists, verify it's valid by trying to get stats
-                    api.getStats()
-                        .then(() => {
-                            // Token valid, decode user info (stored in token)
-                            const payload = JSON.parse(atob(token.split('.')[1]));
-                            setCurrentUser({
-                                id: payload.id,
-                                username: payload.username,
-                                role: payload.role,
-                                name: payload.name
-                            });
-                        })
-                        .catch(() => {
-                            api.removeToken();
-                        });
-                }
+                api.getSession()
+                    .then((data) => {
+                        if (data && data.user) {
+                            setCurrentUser(data.user);
+                        }
+                    })
+                    .catch(() => {
+                        setCurrentUser(null);
+                    });
             }, []);
 
             // Create ticket
@@ -2636,10 +2617,12 @@
                 setLoading(true);
                 try {
                     const data = await api.login(loginForm.username, loginForm.password);
-                    api.setToken(data.token);
+                    if (!data || !data.user) {
+                        throw new Error('Login failed');
+                    }
                     setCurrentUser(data.user);
                     showAlert('Welcome back!');
-                    setLoginForm({ username: '', password: '' }); // Clear form
+                    setLoginForm({ username: '', password: '' });
                 } catch (error) {
                     showAlert(error.message, 'error');
                 } finally {
@@ -2984,10 +2967,15 @@
                 }
             };
 
-            const handleLogout = () => {
-                api.removeToken();
-                setCurrentUser(null);
-                showAlert('Logged out successfully!');
+            const handleLogout = async () => {
+                try {
+                    await api.logout();
+                } catch (error) {
+                    console.error('Logout failed:', error);
+                } finally {
+                    setCurrentUser(null);
+                    showAlert('Logged out successfully!');
+                }
             };
 
             // Login screen

@@ -4,7 +4,8 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Genius IT Solutions - Portal Systems</title>
-    <link rel="icon" type="image/svg+xml" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'%3E%3Cdefs%3E%3ClinearGradient id='grad' x1='0%25' y1='0%25' x2='100%25' y2='100%25'%3E%3Cstop offset='0%25' style='stop-color:%231a6fa1;stop-opacity:1' /%3E%3Cstop offset='100%25' style='stop-color:%232d8cc8;stop-opacity:1' /%3E%3C/linearGradient%3E%3C/defs%3E%3Cpath d='M20,20 Q20,10 30,10 L70,10 Q80,10 80,20 L80,30 Q90,30 90,40 L90,70 Q90,80 80,80 L30,80 Q20,80 20,70 Z' fill='url(%23grad)'/%3E%3Cpath d='M35,35 L65,35 L65,50 L50,50 L50,65 L35,65 Z' fill='white' opacity='0.9'/%3E%3C/svg%3E">
+    <link rel="icon" type="image/png" href="https://geniustech.co.uk/wp-content/uploads/2024/11/cropped-GSlogobox-new_W-32x32.png">
+    <link rel="apple-touch-icon" href="https://geniustech.co.uk/wp-content/uploads/2024/11/cropped-GSlogobox-new_W-180x180.png">
     <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
     <script src="https://unpkg.com/react@18/umd/react.production.min.js"></script>
     <script src="https://unpkg.com/react-dom@18/umd/react-dom.production.min.js"></script>
@@ -1266,6 +1267,356 @@
             white-space: nowrap;
         }
 
+
+
+        .sidebar {
+            overflow: hidden;
+        }
+
+        .sidebar-footer {
+            flex-shrink: 0;
+        }
+
+        .nav {
+            min-height: 0;
+            overflow-y: auto;
+            overscroll-behavior: contain;
+        }
+
+        .login-input-wrap input {
+            padding-left: 10px !important;
+            text-indent: 6px;
+            -webkit-appearance: none;
+            appearance: none;
+        }
+
+        .login-input-wrap input:-webkit-autofill,
+        .login-input-wrap input:-webkit-autofill:hover,
+        .login-input-wrap input:-webkit-autofill:focus,
+        .login-input-wrap input:-webkit-autofill:active {
+            -webkit-box-shadow: 0 0 0 1000px rgba(255,255,255,0) inset !important;
+            -webkit-text-fill-color: #102542 !important;
+            caret-color: #102542 !important;
+            transition: background-color 5000s ease-in-out 0s;
+        }
+
+
+        .dashboard-top-layout {
+            display: grid;
+            grid-template-columns: minmax(0, 1fr) minmax(280px, 30%);
+            gap: 24px;
+            align-items: start;
+            margin-bottom: 24px;
+        }
+
+        .events-panel {
+            background: var(--bg-secondary);
+            border: 1px solid var(--border-color);
+            box-shadow: var(--shadow);
+            border-radius: 16px;
+            overflow: hidden;
+            min-height: 100%;
+        }
+
+        .events-panel-header {
+            padding: 20px 20px 14px;
+            border-bottom: 1px solid var(--border-color);
+        }
+
+        .events-panel-title {
+            font-size: 24px;
+            font-weight: 800;
+            color: var(--text-primary);
+            margin-bottom: 6px;
+            letter-spacing: -0.03em;
+        }
+
+        .events-panel-subtitle {
+            font-size: 14px;
+            color: var(--text-secondary);
+            line-height: 1.45;
+        }
+
+        .events-list {
+            display: flex;
+            flex-direction: column;
+            padding: 8px 0;
+        }
+
+        .event-row {
+            display: grid;
+            grid-template-columns: 82px 72px minmax(0, 1fr);
+            gap: 12px;
+            align-items: start;
+            padding: 12px 20px;
+            border-bottom: 1px solid rgba(26, 111, 161, 0.08);
+        }
+
+        .event-row:last-child {
+            border-bottom: none;
+        }
+
+        .event-date, .event-time {
+            font-size: 12px;
+            font-weight: 800;
+            letter-spacing: 0.08em;
+            text-transform: uppercase;
+            color: var(--logo-blue);
+            white-space: nowrap;
+        }
+
+        .event-time {
+            color: var(--text-secondary);
+        }
+
+        .event-summary {
+            font-size: 14px;
+            font-weight: 700;
+            color: var(--text-primary);
+            line-height: 1.35;
+        }
+
+        .event-location {
+            margin-top: 3px;
+            font-size: 12px;
+            color: var(--text-secondary);
+            line-height: 1.35;
+        }
+
+        .events-empty {
+            padding: 20px;
+            color: var(--text-secondary);
+            font-size: 14px;
+        }
+
+        .tiles-panel {
+            min-width: 0;
+        }
+
+        .tiles-panel .shortcut-grid,
+        .tiles-panel .shortcut-empty {
+            margin-bottom: 0;
+        }
+
+        @media (max-width: 1100px) {
+            .dashboard-top-layout {
+                grid-template-columns: 1fr;
+            }
+        }
+
+        @media (max-width: 768px) {
+            .event-row {
+                grid-template-columns: 1fr;
+                gap: 4px;
+            }
+        }
+
+        .shortcut-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(140px, 1fr));
+            gap: 16px;
+            margin-bottom: 24px;
+        }
+
+        .shortcut-tile {
+            background: var(--bg-secondary);
+            border: 1px solid var(--border-color);
+            box-shadow: var(--shadow);
+            border-radius: 16px;
+            min-height: 108px;
+            padding: 18px 14px;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            gap: 12px;
+            cursor: pointer;
+            transition: transform 0.18s ease, box-shadow 0.18s ease, border-color 0.18s ease;
+            text-align: center;
+        }
+
+        .shortcut-tile:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 14px 28px rgba(26, 111, 161, 0.16);
+            border-color: rgba(26, 111, 161, 0.24);
+        }
+
+        .shortcut-icon-wrap {
+            width: 42px;
+            height: 42px;
+            border-radius: 12px;
+            background: rgba(26, 111, 161, 0.08);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            overflow: hidden;
+        }
+
+        .shortcut-icon-wrap img {
+            width: 26px;
+            height: 26px;
+            object-fit: contain;
+        }
+
+        .shortcut-label {
+            font-size: 13px;
+            font-weight: 800;
+            letter-spacing: 0.08em;
+            text-transform: uppercase;
+            color: var(--text-primary);
+            line-height: 1.25;
+        }
+
+        .shortcut-category {
+            font-size: 11px;
+            font-weight: 800;
+            letter-spacing: 0.1em;
+            text-transform: uppercase;
+            color: var(--logo-blue);
+            line-height: 1.2;
+            margin-top: -4px;
+        }
+
+        .shortcut-empty {
+            padding: 18px;
+            border-radius: 16px;
+            background: rgba(26, 111, 161, 0.04);
+            color: var(--text-secondary);
+            border: 1px dashed rgba(26, 111, 161, 0.18);
+            margin-bottom: 24px;
+        }
+
+        @media (max-width: 768px) {
+    
+        .dashboard-top-layout {
+            display: grid;
+            grid-template-columns: minmax(0, 1fr) minmax(280px, 30%);
+            gap: 24px;
+            align-items: start;
+            margin-bottom: 24px;
+        }
+
+        .events-panel {
+            background: var(--bg-secondary);
+            border: 1px solid var(--border-color);
+            box-shadow: var(--shadow);
+            border-radius: 16px;
+            overflow: hidden;
+            min-height: 100%;
+        }
+
+        .events-panel-header {
+            padding: 20px 20px 14px;
+            border-bottom: 1px solid var(--border-color);
+        }
+
+        .events-panel-title {
+            font-size: 24px;
+            font-weight: 800;
+            color: var(--text-primary);
+            margin-bottom: 6px;
+            letter-spacing: -0.03em;
+        }
+
+        .events-panel-subtitle {
+            font-size: 14px;
+            color: var(--text-secondary);
+            line-height: 1.45;
+        }
+
+        .events-list {
+            display: flex;
+            flex-direction: column;
+            padding: 8px 0;
+        }
+
+        .event-row {
+            display: grid;
+            grid-template-columns: 82px 72px minmax(0, 1fr);
+            gap: 12px;
+            align-items: start;
+            padding: 12px 20px;
+            border-bottom: 1px solid rgba(26, 111, 161, 0.08);
+        }
+
+        .event-row:last-child {
+            border-bottom: none;
+        }
+
+        .event-date, .event-time {
+            font-size: 12px;
+            font-weight: 800;
+            letter-spacing: 0.08em;
+            text-transform: uppercase;
+            color: var(--logo-blue);
+            white-space: nowrap;
+        }
+
+        .event-time {
+            color: var(--text-secondary);
+        }
+
+        .event-summary {
+            font-size: 14px;
+            font-weight: 700;
+            color: var(--text-primary);
+            line-height: 1.35;
+        }
+
+        .event-location {
+            margin-top: 3px;
+            font-size: 12px;
+            color: var(--text-secondary);
+            line-height: 1.35;
+        }
+
+        .events-empty {
+            padding: 20px;
+            color: var(--text-secondary);
+            font-size: 14px;
+        }
+
+        .tiles-panel {
+            min-width: 0;
+        }
+
+        .tiles-panel .shortcut-grid,
+        .tiles-panel .shortcut-empty {
+            margin-bottom: 0;
+        }
+
+        @media (max-width: 1100px) {
+            .dashboard-top-layout {
+                grid-template-columns: 1fr;
+            }
+        }
+
+        @media (max-width: 768px) {
+            .event-row {
+                grid-template-columns: 1fr;
+                gap: 4px;
+            }
+        }
+
+        .shortcut-grid {
+                grid-template-columns: repeat(2, minmax(0, 1fr));
+                gap: 12px;
+            }
+
+            .shortcut-tile {
+                min-height: 96px;
+                padding: 14px 10px;
+            }
+
+            .shortcut-label {
+                font-size: 12px;
+            }
+
+            .shortcut-category {
+                font-size: 10px;
+            }
+        }
+
         .connection-status {
             position: fixed;
             bottom: 20px;
@@ -1296,7 +1647,7 @@
         }
     </style>
 </head>
-<body class="dark">
+<body class="light">
     <div id="root"></div>
     
     <script type="text/babel">
@@ -1307,33 +1658,21 @@
 
         // API Helper Functions
         const api = {
-            // Get auth token
-            getToken: () => localStorage.getItem('token'),
-            
-            // Set auth token
-            setToken: (token) => localStorage.setItem('token', token),
-            
-            // Remove auth token
-            removeToken: () => localStorage.removeItem('token'),
-            
             // Make authenticated request
             request: async (endpoint, options = {}) => {
-                const token = api.getToken();
                 const headers = {
                     'Content-Type': 'application/json',
-                    ...(token && { 'Authorization': `Bearer ${token}` }),
                     ...options.headers
                 };
 
                 try {
                     const response = await fetch(`${API_URL}${endpoint}`, {
                         ...options,
+                        credentials: 'include',
                         headers
                     });
 
                     if (response.status === 401) {
-                        api.removeToken();
-                        window.location.reload();
                         return null;
                     }
 
@@ -1356,6 +1695,8 @@
                     method: 'POST',
                     body: JSON.stringify({ username, password })
                 }),
+            logout: () => api.request('/auth/logout', { method: 'POST' }),
+            getSession: () => api.request('/auth/session', { method: 'GET' }),
 
             // Tickets
             getTickets: (status) => 
@@ -1446,10 +1787,23 @@
             permanentDelete: (type, id) =>
                 api.request(`/trash/${type}/${id}`, { method: 'DELETE' }),
 
+            emptyTrash: () =>
+                api.request('/trash/empty', { method: 'DELETE' }),
+
             // Analytics
             getStats: () => api.request('/analytics/stats'),
             
-            getMonthlyData: () => api.request('/analytics/monthly')
+            getMonthlyData: () => api.request('/analytics/monthly'),
+
+            getPortalLinks: () => api.request('/portal-links'),
+
+            getUpcomingEvents: () => api.request('/calendar/upcoming'),
+
+            savePortalLinks: (links) =>
+                api.request('/portal-links', {
+                    method: 'POST',
+                    body: JSON.stringify({ links })
+                })
         };
 
         // Alert Component
@@ -1523,7 +1877,7 @@
             const [currentView, setCurrentView] = useState('dashboard');
             const [darkMode, setDarkMode] = useState(() => {
                 const saved = localStorage.getItem('darkMode');
-                return saved !== null ? saved === 'true' : true;
+                return saved !== null ? saved === 'true' : false;
             });
             const [loading, setLoading] = useState(false);
             const [alert, setAlert] = useState(null);
@@ -1555,6 +1909,8 @@
             const [showNewInvoice, setShowNewInvoice] = useState(false);
             const [showEditInvoice, setShowEditInvoice] = useState(false);
             const [editingInvoice, setEditingInvoice] = useState(null);
+            const [showInvoiceDetail, setShowInvoiceDetail] = useState(false);
+            const [detailInvoice, setDetailInvoice] = useState(null);
             const [showAddStaff, setShowAddStaff] = useState(false);
             const [showEditUser, setShowEditUser] = useState(false);
             const [editingUser, setEditingUser] = useState(null);
@@ -1569,7 +1925,7 @@
             });
             const [invoiceSections, setInvoiceSections] = useState([{ description: '', type: 'hourly', rate: '', hours: '', amount: '' }]);
             const [newInvoice, setNewInvoice] = useState({
-                client: '', paymentTerms: 'now', inQuickBooks: 'no', paymentDeadline: '', contactName: '', contactEmail: '', contactPhone: ''
+                client: '', invoiceDate: '', paymentTerms: 'now', inQuickBooks: 'no', paymentDeadline: '', contactName: '', contactEmail: '', contactPhone: ''
             });
             const [newStaff, setNewStaff] = useState({
                 username: '', password: '', role: 'staff', firstName: '', lastName: '', email: ''
@@ -1586,10 +1942,139 @@
                 pass: '',
                 from: ''
             });
+            const [portalLinks, setPortalLinks] = useState([]);
+            const [portalLinksDraft, setPortalLinksDraft] = useState([]);
+            const [ticketSearch, setTicketSearch] = useState('');
+            const [ticketSort, setTicketSort] = useState('deadline_asc');
+            const [upcomingEvents, setUpcomingEvents] = useState([]);
 
             // Show alert
             const showAlert = (message, type = 'success') => {
                 setAlert({ message, type });
+            };
+
+            const getEmptyInvoice = () => ({
+                client: '', invoiceDate: '', paymentTerms: 'now', inQuickBooks: 'no', paymentDeadline: '', contactName: '', contactEmail: '', contactPhone: ''
+            });
+
+            const getEmptyInvoiceSections = () => ([{ description: '', type: 'hourly', rate: '', hours: '', amount: '' }]);
+
+            const openNewInvoiceModal = () => {
+                setNewInvoice(getEmptyInvoice());
+                setInvoiceSections(getEmptyInvoiceSections());
+                setShowNewInvoice(true);
+            };
+
+            const closeNewInvoiceModal = () => {
+                setShowNewInvoice(false);
+                setNewInvoice(getEmptyInvoice());
+                setInvoiceSections(getEmptyInvoiceSections());
+            };
+
+            const normalizeDateInput = (value) => {
+                if (!value) return '';
+                if (typeof value === 'string') return value.slice(0, 10);
+                return new Date(value).toISOString().slice(0, 10);
+            };
+
+            const formatInvoiceDate = (invoice) => {
+                const raw = invoice?.invoiceDate || invoice?.date || invoice?.createdAt;
+                if (!raw) return 'N/A';
+                const d = new Date(raw);
+                return isNaN(d.getTime()) ? 'N/A' : d.toLocaleDateString('en-GB');
+            };
+
+            const handleViewInvoice = (invoice) => {
+                setDetailInvoice(invoice);
+                setShowInvoiceDetail(true);
+            };
+
+            const formatEventDate = (value) => {
+                if (!value) return '';
+                const d = new Date(value);
+                if (isNaN(d.getTime())) return '';
+                return d.toLocaleDateString('en-GB', { day: '2-digit', month: 'short' });
+            };
+
+            const formatEventTime = (event) => {
+                if (!event?.start) return '';
+                if (event.allDay) return 'ALL DAY';
+                const d = new Date(event.start);
+                if (isNaN(d.getTime())) return '';
+                return d.toLocaleTimeString('en-GB', { hour: '2-digit', minute: '2-digit' });
+            };
+
+            const createEmptyPortalLink = () => ({ label: '', category: '', url: '', sortOrder: 0 });
+
+            const normalizePortalUrl = (value) => {
+                if (!value) return '';
+                const trimmed = value.trim();
+                if (!trimmed) return '';
+                return /^https?:\/\//i.test(trimmed) ? trimmed : `https://${trimmed}`;
+            };
+
+            const getPortalLinkIcon = (url) => {
+                const safeUrl = normalizePortalUrl(url);
+                if (!safeUrl) return '';
+                return `https://www.google.com/s2/favicons?sz=64&domain_url=${encodeURIComponent(safeUrl)}`;
+            };
+
+            const openPortalLink = (url) => {
+                const safeUrl = normalizePortalUrl(url);
+                if (!safeUrl) return;
+                window.open(safeUrl, '_blank', 'noopener,noreferrer');
+            };
+
+            const handlePortalLinkDraftChange = (index, field, value) => {
+                setPortalLinksDraft(prev => prev.map((item, i) => i === index ? { ...item, [field]: value } : item));
+            };
+
+            const addPortalLinkDraft = () => {
+                setPortalLinksDraft(prev => [...prev, createEmptyPortalLink()]);
+            };
+
+            const removePortalLinkDraft = (index) => {
+                setPortalLinksDraft(prev => prev.filter((_, i) => i !== index).map((link, idx) => ({ ...link, sortOrder: idx })));
+            };
+
+            const movePortalLinkDraft = (index, direction) => {
+                setPortalLinksDraft(prev => {
+                    const targetIndex = index + direction;
+                    if (targetIndex < 0 || targetIndex >= prev.length) return prev;
+                    const next = [...prev];
+                    const [item] = next.splice(index, 1);
+                    next.splice(targetIndex, 0, item);
+                    return next.map((link, idx) => ({ ...link, sortOrder: idx }));
+                });
+            };
+
+            const handleSavePortalLinks = async () => {
+                const cleaned = portalLinksDraft
+                    .map((item, index) => ({
+                        label: (item.label || '').trim(),
+                        category: (item.category || '').trim(),
+                        url: normalizePortalUrl(item.url || ''),
+                        sortOrder: Number.isFinite(Number(item.sortOrder)) ? Number(item.sortOrder) : index
+                    }))
+                    .filter(item => item.label && item.url);
+
+                if (portalLinksDraft.length > 0 && cleaned.length === 0) {
+                    showAlert('Add at least one complete website tile or remove empty rows.', 'error');
+                    return;
+                }
+
+                setLoading(true);
+                try {
+                    const saved = await api.savePortalLinks(cleaned);
+                    const links = Array.isArray(saved) ? saved : (saved.links || []);
+                    setPortalLinks(links);
+                    setPortalLinksDraft(links.length ? links : []);
+                    showAlert('Website tiles saved successfully!');
+                } catch (error) {
+                    showAlert(error.message || 'Failed to save website tiles', 'error');
+                } finally {
+                    setLoading(false);
+                }
             };
 
             // Load initial data
@@ -1606,6 +2091,8 @@
                         paidInvoicesData,
                         archivedInvoicesData,
                         statsData,
+                        portalLinksData,
+                        upcomingEventsData,
                         usersData
                     ] = await Promise.all([
                         api.getTickets('active'),
@@ -1615,7 +2102,9 @@
                         api.getInvoices('paid'),
                         api.getInvoices('archived'),
                         api.getStats(),
-                        currentUser.role !== 'staff' ? api.getUsers() : Promise.resolve([])
+                        api.getPortalLinks(),
+                        api.getUpcomingEvents().catch(() => []),
+                        api.getUsers()
                     ]);
 
                     setTickets(activeTickets);
@@ -1643,7 +2132,10 @@
                         activeInvoices: activeInvoices.length
                     });
                     
-                    if (currentUser.role !== 'staff') setUsers(usersData);
+                    setPortalLinks(Array.isArray(portalLinksData) ? portalLinksData.map((link, index) => ({ ...link, sortOrder: Number.isFinite(Number(link.sortOrder)) ? Number(link.sortOrder) : index })) : []);
+                    setPortalLinksDraft(Array.isArray(portalLinksData) ? portalLinksData.map((link, index) => ({ ...link, sortOrder: Number.isFinite(Number(link.sortOrder)) ? Number(link.sortOrder) : index })) : []);
+                    setUpcomingEvents(Array.isArray(upcomingEventsData) ? upcomingEventsData : []);
+                    setUsers(Array.isArray(usersData) ? usersData : []);
                 } catch (error) {
                     showAlert(error.message, 'error');
                 } finally {
@@ -1679,24 +2171,15 @@
 
             // Check for existing session
             useEffect(() => {
-                const token = api.getToken();
-                if (token) {
-                    // Token exists, verify it's valid by trying to get stats
-                    api.getStats()
-                        .then(() => {
-                            // Token valid, decode user info (stored in token)
-                            const payload = JSON.parse(atob(token.split('.')[1]));
-                            setCurrentUser({
-                                id: payload.id,
-                                username: payload.username,
-                                role: payload.role,
-                                name: payload.name
-                            });
-                        })
-                        .catch(() => {
-                            api.removeToken();
-                        });
-                }
+                api.getSession()
+                    .then((data) => {
+                        if (data && data.user) {
+                            setCurrentUser(data.user);
+                        }
+                    })
+                    .catch(() => {
+                        setCurrentUser(null);
+                    });
             }, []);
 
             // Create ticket
@@ -1741,6 +2224,44 @@
                     setResolution('');
                     setSelectedTicket(null);
                     loadData();
+                } catch (error) {
+                    showAlert(error.message, 'error');
+                } finally {
+                    setLoading(false);
+                }
+            };
+
+            const handleCompleteAndInvoice = async () => {
+                if (!selectedTicket) return;
+                setLoading(true);
+                try {
+                    await api.completeTicket(selectedTicket.id, resolution);
+
+                    const today = new Date().toISOString().slice(0, 10);
+                    setNewInvoice({
+                        client: selectedTicket.client || '',
+                        invoiceDate: today,
+                        paymentTerms: 'now',
+                        inQuickBooks: 'no',
+                        paymentDeadline: '',
+                        contactName: '',
+                        contactEmail: '',
+                        contactPhone: ''
+                    });
+                    setInvoiceSections([{
+                        description: selectedTicket.task || '',
+                        type: 'hourly',
+                        rate: '',
+                        hours: '',
+                        amount: ''
+                    }]);
+
+                    setShowResolution(false);
+                    setResolution('');
+                    setSelectedTicket(null);
+                    await loadData();
+                    setShowNewInvoice(true);
+                    showAlert('Ticket completed. New invoice opened.');
                 } catch (error) {
                     showAlert(error.message, 'error');
                 } finally {
@@ -1846,9 +2367,7 @@
                         sections: invoiceSections
                     });
                     showAlert('Invoice created successfully!');
-                    setShowNewInvoice(false);
-                    setNewInvoice({ client: '', paymentTerms: 'now', inQuickBooks: 'no', paymentDeadline: '', contactName: '', contactEmail: '', contactPhone: '' });
-                    setInvoiceSections([{ description: '', type: 'hourly', rate: '', hours: '', amount: '' }]);
+                    closeNewInvoiceModal();
                     loadData();
                 } catch (error) {
                     console.error('Invoice creation error:', error);
@@ -1860,8 +2379,8 @@
 
             // Open edit invoice modal
             const handleEditInvoice = (invoice) => {
-                setEditingInvoice(invoice);
-                setInvoiceSections(invoice.sections || [{ description: '', type: 'hourly', rate: '', hours: '', amount: '' }]);
+                setEditingInvoice({ ...invoice, invoiceDate: normalizeDateInput(invoice.invoiceDate) });
+                setInvoiceSections((invoice.sections && invoice.sections.length ? invoice.sections : getEmptyInvoiceSections()).map(section => ({ ...section })));
                 setShowEditInvoice(true);
             };
 
@@ -1871,6 +2390,7 @@
                 try {
                     await api.updateInvoice(editingInvoice.id, {
                         client: editingInvoice.client,
+                        invoiceDate: editingInvoice.invoiceDate || '',
                         paymentTerms: editingInvoice.paymentTerms,
                         inQuickBooks: editingInvoice.inQuickBooks,
                         paymentDeadline: editingInvoice.paymentDeadline,
@@ -1882,7 +2402,7 @@
                     showAlert('Invoice updated successfully!');
                     setShowEditInvoice(false);
                     setEditingInvoice(null);
-                    setInvoiceSections([{ description: '', type: 'hourly', rate: '', hours: '', amount: '' }]);
+                    setInvoiceSections(getEmptyInvoiceSections());
                     loadData();
                 } catch (error) {
                     showAlert(error.message, 'error');
@@ -1994,6 +2514,27 @@
                 }
             };
 
+            const handleEmptyTrash = async () => {
+                if (currentUser?.role !== 'owner') return;
+                if (!trashedItems.length) {
+                    showAlert('Trash is already empty', 'error');
+                    return;
+                }
+                if (!confirm('Warning 1 of 2: Empty the entire trash? This will permanently delete all deleted tickets and invoices.')) return;
+                if (!confirm('Final warning 2 of 2: This cannot be undone. Empty trash now?')) return;
+                setLoading(true);
+                try {
+                    await api.emptyTrash();
+                    showAlert('Trash emptied successfully!');
+                    setTrashedItems([]);
+                    loadData();
+                } catch (error) {
+                    showAlert(error.message, 'error');
+                } finally {
+                    setLoading(false);
+                }
+            };
+
             // Create user
             const handleCreateUser = async () => {
                 setLoading(true);
@@ -2076,10 +2617,12 @@
                 setLoading(true);
                 try {
                     const data = await api.login(loginForm.username, loginForm.password);
-                    api.setToken(data.token);
+                    if (!data || !data.user) {
+                        throw new Error('Login failed');
+                    }
                     setCurrentUser(data.user);
                     showAlert('Welcome back!');
-                    setLoginForm({ username: '', password: '' }); // Clear form
+                    setLoginForm({ username: '', password: '' });
                 } catch (error) {
                     showAlert(error.message, 'error');
                 } finally {
@@ -2175,6 +2718,18 @@
 
                 // Map exported Tickets sheet rows to backend-expected format
                 const rawTickets = jsonData.Tickets || jsonData.tickets || [];
+                const rawPortalLinks = jsonData['Website Tiles'] || jsonData.websiteTiles || jsonData['Portal Links'] || jsonData.portalLinks || [];
+                const portalLinks = rawPortalLinks
+                    .filter(row => row.Label || row.label || row.URL || row.url)
+                    .map((row, index) => ({
+                        label: row.Label || row.label || '',
+                        category: row.Category || row.category || '',
+                        url: normalizePortalUrl(row.URL || row.Url || row.url || ''),
+                        sortOrder: Number.isFinite(Number(row['Sort Order'] || row.sortOrder)) ? Number(row['Sort Order'] || row.sortOrder) : index,
+                        enabled: String(row.Enabled || row.enabled || 'true').toLowerCase() !== 'false'
+                    }))
+                    .filter(row => row.label && row.url);
+
                 const tickets = rawTickets
                     .filter(row => row.Client || row.client)
                     .map(row => ({
@@ -2208,15 +2763,15 @@
                     }))
                     .filter(row => row.client);
 
-                if (tickets.length === 0 && invoices.length === 0) {
-                    return showAlert('No valid tickets or invoices found in this file. Make sure you are uploading a file exported from this system.', 'error');
+                if (tickets.length === 0 && invoices.length === 0 && portalLinks.length === 0) {
+                    return showAlert('No valid tickets, invoices or website tiles found in this file. Make sure you are uploading a file exported from this system.', 'error');
                 }
 
                 setLoading(true);
                 try {
                     const response = await api.request('/data/import', {
                         method: 'POST',
-                        body: JSON.stringify({ tickets, invoices })
+                        body: JSON.stringify({ tickets, invoices, portalLinks })
                     });
                     showAlert(response.message || 'Import successful!');
                     loadData();
@@ -2371,6 +2926,18 @@
                         XLSX.utils.book_append_sheet(wb, detailsSheet, 'Invoice Details');
                     }
 
+                    const websiteTilesData = (data.portalLinks || []).map((link, index) => ({
+                        'Sort Order': Number.isFinite(Number(link.sortOrder)) ? Number(link.sortOrder) : index,
+                        'Label': link.label || '',
+                        'Category': link.category || '',
+                        'URL': link.url || '',
+                        'Enabled': link.enabled !== false ? 'TRUE' : 'FALSE'
+                    }));
+                    if (websiteTilesData.length > 0) {
+                        const websiteTilesSheet = XLSX.utils.json_to_sheet(websiteTilesData);
+                        XLSX.utils.book_append_sheet(wb, websiteTilesSheet, 'Website Tiles');
+                    }
+
                     // Users sheet
                     const usersData = data.users.map(u => ({
                         'ID': u.id,
@@ -2400,10 +2967,15 @@
                 }
             };
 
-            const handleLogout = () => {
-                api.removeToken();
-                setCurrentUser(null);
-                showAlert('Logged out successfully!');
+            const handleLogout = async () => {
+                try {
+                    await api.logout();
+                } catch (error) {
+                    console.error('Logout failed:', error);
+                } finally {
+                    setCurrentUser(null);
+                    showAlert('Logged out successfully!');
+                }
             };
 
             // Login screen
@@ -2417,23 +2989,23 @@
                                 <div className="login-panel-brand">
                                     <div className="login-brand-top">
                                         <img className="login-brand-logo" src="https://geniustech.co.uk/wp-content/uploads/2024/11/GSlogobox-new_W.png" alt="Genius IT Solutions" />
-                                        <div className="login-brand-badge">Portal Systems</div>
-                                        <h1 className="login-brand-title">Welcome to <span>Genius IT Solutions</span></h1>
-                                        <p className="login-brand-copy">Providing Quality IT Support in York, Leeds and Across the UK.</p>
-                                        <p className="login-brand-copy secondary">For Web Design / Web App and Portal Projects, get in touch.</p>
+                                        <div className="login-brand-badge">Custom Portal Systems</div>
+                                        <h1 className="login-brand-title">Well Hello!<span></span></h1>
+                                        <p className="login-brand-copy">We Providing Quality IT Support in York, Leeds and Across the UK.</p>
+                                        <p className="login-brand-copy secondary">Genius not only supports IT function, but provisions custom web & software services.</p>
                                     </div>
                                     <div className="login-trust-card">
-                                        <div className="login-trust-title">Professional client access portal</div>
-                                        <div className="login-trust-copy">Secure access for your Genius IT Solutions portal systems with a polished interface designed for production use.</div>
+                                        <div className="login-trust-title">Client Web Portals? Task Management?</div>
+                                        <div className="login-trust-copy">Get in touch for more information on Web Apps / Portal Projects, for your organisation.</div>
                                     </div>
                                 </div>
                                 <div className="login-panel-form">
                                     <div className="login-card">
                                         <div className="login-card-header">
                                             <img className="login-card-logo" src="https://geniustech.co.uk/wp-content/uploads/2024/11/GSlogobox-new_W.png" alt="Genius IT Solutions" />
-                                            <div className="login-card-kicker">Portal Systems</div>
+                                            <div className="login-card-kicker">Dashboard Services</div>
                                             <h2 className="login-card-title">Sign in</h2>
-                                            <p className="login-card-subtitle">Use your username and password to access your Genius IT Solutions portal.</p>
+                                            <p className="login-card-subtitle">You need your username and password to access your dashboard.</p>
                                         </div>
 
                                         <form onSubmit={handleLogin}>
@@ -2470,7 +3042,7 @@
                                             </button>
                                         </form>
 
-                                        <div className="login-footer-note">Genius IT Solutions · Portal Systems</div>
+                                        <div className="login-footer-note">Genius IT Solutions · Dashboard Services</div>
                                     </div>
                                 </div>
                             </div>
@@ -2479,8 +3051,71 @@
                 );
             }
 
-            // My Tickets view
-            const myTickets = tickets.filter(t => t.assignedTo === currentUser.id);
+            const normalizeSearch = (value) => String(value || '').toLowerCase().trim();
+
+            const sortTickets = (items, sortBy = ticketSort) => {
+                const sorted = [...items];
+                sorted.sort((a, b) => {
+                    const dateA = a?.deadline ? new Date(a.deadline).getTime() : Number.MAX_SAFE_INTEGER;
+                    const dateB = b?.deadline ? new Date(b.deadline).getTime() : Number.MAX_SAFE_INTEGER;
+                    const clientA = String(a?.client || '').toLowerCase();
+                    const clientB = String(b?.client || '').toLowerCase();
+                    if (sortBy === 'client_asc') return clientA.localeCompare(clientB);
+                    if (sortBy === 'client_desc') return clientB.localeCompare(clientA);
+                    if (sortBy === 'deadline_desc') return dateB - dateA;
+                    return dateA - dateB;
+                });
+                return sorted;
+            };
+
+            const matchesTicketSearch = (ticket, term = ticketSearch) => {
+                const q = normalizeSearch(term);
+                if (!q) return true;
+                return [
+                    ticket?.client,
+                    ticket?.task,
+                    ticket?.description,
+                    ticket?.resolution,
+                    ticket?.assignedToName,
+                    ticket?.location,
+                    ticket?.urgency
+                ].some(value => normalizeSearch(value).includes(q));
+            };
+
+            const applyTicketFilters = (items) => sortTickets(items.filter(ticket => matchesTicketSearch(ticket)));
+
+            const uniqueTicketsMap = new Map();
+            [...tickets, ...completedTickets, ...archivedTickets].forEach(ticket => {
+                if (ticket?.id && !uniqueTicketsMap.has(ticket.id)) uniqueTicketsMap.set(ticket.id, ticket);
+            });
+            const allTickets = Array.from(uniqueTicketsMap.values()).map(ticket => ({
+                ...ticket,
+                statusLabel: ticket.archivedDate ? 'Archived' : ticket.completedDate ? 'Completed' : (ticket.deadline && new Date(ticket.deadline) < new Date() ? 'Overdue' : 'Active')
+            }));
+
+            const activeTicketsFiltered = applyTicketFilters(tickets);
+            const completedTicketsFiltered = applyTicketFilters(completedTickets);
+            const overdueTicketsFiltered = applyTicketFilters(overdueTickets);
+            const archivedTicketsFiltered = applyTicketFilters(archivedTickets);
+            const myTickets = applyTicketFilters(tickets.filter(t => String(t.assignedTo) === String(currentUser.id)));
+            const searchedTickets = ticketSearch ? sortTickets(allTickets.filter(ticket => matchesTicketSearch(ticket))) : [];
+
+            const renderTicketControls = () => (
+                <div style={{display: 'flex', gap: '12px', flexWrap: 'wrap', marginBottom: '18px'}}>
+                    <input
+                        style={{flex: '1 1 320px'}}
+                        placeholder="Search all tickets, including archived..."
+                        value={ticketSearch}
+                        onChange={e => setTicketSearch(e.target.value)}
+                    />
+                    <select style={{maxWidth: '220px'}} value={ticketSort} onChange={e => setTicketSort(e.target.value)}>
+                        <option value="deadline_asc">Deadline: Oldest first</option>
+                        <option value="deadline_desc">Deadline: Newest first</option>
+                        <option value="client_asc">Client: A-Z</option>
+                        <option value="client_desc">Client: Z-A</option>
+                    </select>
+                </div>
+            );
             
             // Handle navigation click - close sidebar on mobile
             const handleNavClick = (view) => {
@@ -2626,9 +3261,83 @@
                             </div>
 
                             <div className="content-area">
+                                {['tickets', 'mytickets', 'overdue', 'completed', 'archived'].includes(currentView) && ticketSearch && (
+                                    <div className="card" style={{marginBottom: '24px'}}>
+                                        <div className="card-header">
+                                            <div className="card-title">Search Results Across All Tickets</div>
+                                            <div style={{fontSize: '14px', color: 'var(--text-secondary)'}}>{searchedTickets.length} match(es)</div>
+                                        </div>
+                                        {renderTicketControls()}
+                                        <table>
+                                            <thead>
+                                                <tr>
+                                                    <th>Client</th>
+                                                    <th>Task</th>
+                                                    <th>Status</th>
+                                                    <th>Deadline</th>
+                                                    <th>Assigned To</th>
+                                                </tr>
+                                            </thead>
+                                            <tbody>
+                                                {searchedTickets.map(ticket => (
+                                                    <tr key={`search-${ticket.id}`} style={{cursor: 'pointer'}} onClick={() => { setDetailTicket(ticket); setShowTicketDetail(true); }}>
+                                                        <td>{ticket.client}</td>
+                                                        <td>{ticket.task}</td>
+                                                        <td>{ticket.statusLabel}</td>
+                                                        <td>{ticket.deadline ? new Date(ticket.deadline).toLocaleDateString('en-GB') : 'N/A'}</td>
+                                                        <td>{ticket.assignedToName || 'Unassigned'}</td>
+                                                    </tr>
+                                                ))}
+                                            </tbody>
+                                        </table>
+                                    </div>
+                                )}
                                 {/* Dashboard View */}
                                 {currentView === 'dashboard' && (
                                     <>
+                                        <div className="dashboard-top-layout">
+                                            <div className="tiles-panel">
+                                                {portalLinks.length > 0 ? (
+                                                    <div className="shortcut-grid">
+                                                        {portalLinks.map((link, index) => (
+                                                            <div key={`${link.url}-${index}`} className="shortcut-tile" onClick={() => openPortalLink(link.url)} title={normalizePortalUrl(link.url)}>
+                                                                <div className="shortcut-icon-wrap">
+                                                                    <img src={getPortalLinkIcon(link.url)} alt="" className="shortcut-icon" onError={(e) => { e.currentTarget.style.display = 'none'; }} />
+                                                                </div>
+                                                                <div className="shortcut-label">{String(link.label || '').toUpperCase()}</div>
+                                                                {link.category ? <div className="shortcut-category">{String(link.category || '').toUpperCase()}</div> : null}
+                                                            </div>
+                                                        ))}
+                                                    </div>
+                                                ) : currentUser?.role === 'owner' ? (
+                                                    <div className="shortcut-empty">No website tiles configured yet. Go to <strong>Data Management → Website Tiles</strong> to add them.</div>
+                                                ) : null}
+                                            </div>
+
+                                            <div className="events-panel">
+                                                <div className="events-panel-header">
+                                                    <div className="events-panel-title">Upcoming Appointments</div>
+                                                    <div className="events-panel-subtitle">Next 15 calendar items from the Genius shared schedule.</div>
+                                                </div>
+                                                {upcomingEvents.length > 0 ? (
+                                                    <div className="events-list">
+                                                        {upcomingEvents.map((event, index) => (
+                                                            <div className="event-row" key={`${event.start}-${event.summary}-${index}`}>
+                                                                <div className="event-date">{formatEventDate(event.start)}</div>
+                                                                <div className="event-time">{formatEventTime(event)}</div>
+                                                                <div>
+                                                                    <div className="event-summary">{event.summary}</div>
+                                                                    {event.location ? <div className="event-location">{event.location}</div> : null}
+                                                                </div>
+                                                            </div>
+                                                        ))}
+                                                    </div>
+                                                ) : (
+                                                    <div className="events-empty">No upcoming appointments found in the next 30 days.</div>
+                                                )}
+                                            </div>
+                                        </div>
+
                                         <div className="stats-grid">
                                             <div className="stat-card" style={{cursor: 'pointer'}} onClick={() => handleNavClick('tickets')}>
                                                 <div className="stat-header" style={{justifyContent: 'center', textAlign: 'center'}}>
@@ -2678,7 +3387,7 @@
                                                 <div className="stat-header" style={{justifyContent: 'center', textAlign: 'center'}}>
                                                     <div>
                                                         <div className="stat-icon mint" style={{margin: '0 auto 12px', width: '48px', height: '48px', borderRadius: '12px', display: 'flex', alignItems: 'center', justifyContent: 'center', fontSize: '24px'}}>
-                                                            <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2"><line x1="12" y1="1" x2="12" y2="23"></line><path d="M17 5H9.5a3.5 3.5 0 000 7h5a3.5 3.5 0 010 7H6"></path></svg>
+                                                            <span style={{fontSize: '28px', fontWeight: '800', lineHeight: '1'}}>£</span>
                                                         </div>
                                                         <div className="stat-label">Revenue</div>
                                                         <div className="stat-value">£{(parseFloat(stats.revenue) || 0).toFixed(2)}</div>
@@ -2863,6 +3572,7 @@
                                                 + New Ticket
                                             </button>
                                         </div>
+                                        {renderTicketControls()}
                                         <table>
                                             <thead>
                                                 <tr>
@@ -2875,7 +3585,7 @@
                                                 </tr>
                                             </thead>
                                             <tbody>
-                                                {tickets.map(ticket => (
+                                                {activeTicketsFiltered.map(ticket => (
                                                     <tr key={ticket.id} style={{cursor: 'pointer'}} onClick={() => { setDetailTicket(ticket); setShowTicketDetail(true); }}>
                                                         <td>{ticket.client}</td>
                                                         <td>{ticket.task}</td>
@@ -2918,6 +3628,7 @@
                                         <div className="card-header">
                                             <div className="card-title">My Tickets</div>
                                         </div>
+                                        {renderTicketControls()}
                                         <table>
                                             <thead>
                                                 <tr>
@@ -2965,6 +3676,7 @@
                                         <div className="card-header">
                                             <div className="card-title">Overdue Tickets</div>
                                         </div>
+                                        {renderTicketControls()}
                                         <table>
                                             <thead>
                                                 <tr>
@@ -2977,7 +3689,7 @@
                                                 </tr>
                                             </thead>
                                             <tbody>
-                                                {overdueTickets.map(ticket => {
+                                                {overdueTicketsFiltered.map(ticket => {
                                                     const daysOverdue = Math.floor((new Date() - new Date(ticket.deadline)) / (1000 * 60 * 60 * 24));
                                                     return (
                                                         <tr key={ticket.id} style={{background: 'rgba(255, 139, 148, 0.1)', cursor: 'pointer'}} onClick={() => { setDetailTicket(ticket); setShowTicketDetail(true); }}>
@@ -3013,6 +3725,7 @@
                                         <div className="card-header">
                                             <div className="card-title">Completed Tickets</div>
                                         </div>
+                                        {renderTicketControls()}
                                         <table>
                                             <thead>
                                                 <tr>
@@ -3024,7 +3737,7 @@
                                                 </tr>
                                             </thead>
                                             <tbody>
-                                                {completedTickets.map(ticket => (
+                                                {completedTicketsFiltered.map(ticket => (
                                                     <tr key={ticket.id} style={{cursor: 'pointer'}} onClick={() => { setDetailTicket(ticket); setShowTicketDetail(true); }}>
                                                         <td>{ticket.client}</td>
                                                         <td>{ticket.task}</td>
@@ -3052,7 +3765,7 @@
                                     <div className="card">
                                         <div className="card-header">
                                             <div className="card-title">Active Invoices</div>
-                                            <button className="btn btn-primary" onClick={() => setShowNewInvoice(true)}>
+                                            <button className="btn btn-primary" onClick={openNewInvoiceModal}>
                                                 + New Invoice
                                             </button>
                                         </div>
@@ -3071,10 +3784,13 @@
                                                     <tr key={invoice.id}>
                                                         <td>{invoice.client}</td>
                                                         <td>£{(parseFloat(invoice.totalAmount) || 0).toFixed(2)}</td>
-                                                        <td>{new Date(invoice.createdAt || invoice.date).toLocaleDateString()}</td>
+                                                        <td>{formatInvoiceDate(invoice)}</td>
                                                         <td>{invoice.paymentTerms?.replace('_', ' ') || 'N/A'}</td>
                                                         <td>
                                                             <div className="action-buttons">
+                                                                <button className="btn btn-secondary" onClick={() => handleViewInvoice(invoice)}>
+                                                                    <Icon name="eye" size={16} /> View
+                                                                </button>
                                                                 <button className="btn btn-secondary" onClick={() => handleEditInvoice(invoice)}>
                                                                     <Icon name="edit" size={16} /> Edit
                                                                 </button>
@@ -3117,10 +3833,13 @@
                                                     <tr key={invoice.id}>
                                                         <td>{invoice.client}</td>
                                                         <td>£{(parseFloat(invoice.totalAmount) || 0).toFixed(2)}</td>
-                                                        <td>{new Date(invoice.createdAt || invoice.date).toLocaleDateString()}</td>
+                                                        <td>{formatInvoiceDate(invoice)}</td>
                                                         <td>{new Date(invoice.paidAt || invoice.paidDate).toLocaleDateString()}</td>
                                                         <td>
                                                             <div className="action-buttons">
+                                                                <button className="btn btn-secondary" onClick={() => handleViewInvoice(invoice)}>
+                                                                    <Icon name="eye" size={16} /> View
+                                                                </button>
                                                                 <button className="btn btn-secondary" onClick={() => handleArchiveInvoice(invoice.id)}>
                                                                     <Icon name="archive" size={16} /> Archive
                                                                 </button>
@@ -3338,7 +4057,7 @@
                                         </div>
                                         {/* Sub-tabs */}
                                         <div style={{display: 'flex', gap: '4px', padding: '16px 24px 0', borderBottom: '2px solid var(--border-color)'}}>
-                                            {['export', 'import', 'clear'].map(tab => (
+                                            {['export', 'import', 'links', 'clear'].map(tab => (
                                                 <button
                                                     key={tab}
                                                     onClick={() => setDataSubTab(tab)}
@@ -3358,6 +4077,7 @@
                                                     }}>
                                                     {tab === 'export' && (<><Icon name="download" size={14} /> Export</>)}
                                                     {tab === 'import' && (<><Icon name="upload" size={14} /> Import</>)}
+                                                    {tab === 'links' && (<><Icon name="settings" size={14} /> Website Tiles</>)}
                                                     {tab === 'clear' && (<><Icon name="trash" size={14} /> Clear Data</>)}
                                                 </button>
                                             ))}
@@ -3438,6 +4158,91 @@
                                                 </div>
                                             )}
 
+
+                                            {/* WEBSITE TILES TAB */}
+                                            {dataSubTab === 'links' && (
+                                                <div>
+                                                    <div style={{marginBottom: '20px', padding: '16px', background: 'rgba(110, 181, 255, 0.1)', borderRadius: '8px', border: '1px solid rgba(110, 181, 255, 0.3)'}}>
+                                                        <h4 style={{margin: '0 0 8px 0', color: 'var(--logo-blue)', display: 'flex', alignItems: 'center', gap: '8px'}}><Icon name="settings" size={16} /> Website Tiles</h4>
+                                                        <p style={{margin: 0, fontSize: '14px', color: 'var(--text-secondary)'}}>
+                                                            Add shortcut tiles that appear above the dashboard cards for all users. Only the owner can edit them.
+                                                        </p>
+                                                    </div>
+
+                                                    <div style={{display: 'flex', flexDirection: 'column', gap: '14px'}}>
+                                                        {portalLinksDraft.length === 0 && (
+                                                            <div style={{padding: '18px', background: 'var(--bg-subtle)', border: '1px dashed var(--border-color)', borderRadius: '12px', color: 'var(--text-secondary)'}}>
+                                                                No website tiles added yet. Click <strong>Add Tile</strong> to create your first shortcut.
+                                                            </div>
+                                                        )}
+
+                                                        {portalLinksDraft.map((link, index) => (
+                                                            <div key={index} style={{padding: '16px', background: 'var(--bg-secondary)', border: '1px solid var(--border-color)', borderRadius: '12px', boxShadow: 'var(--shadow)'}}>
+                                                                <div style={{display: 'grid', gridTemplateColumns: 'minmax(0, 1fr) minmax(0, 1fr) minmax(0, 1.4fr) auto', gap: '12px', alignItems: 'end'}}>
+                                                                    <div>
+                                                                        <label className="form-label">Label</label>
+                                                                        <input
+                                                                            type="text"
+                                                                            value={link.label || ''}
+                                                                            onChange={e => handlePortalLinkDraftChange(index, 'label', e.target.value)}
+                                                                            placeholder="Example: QUICKBOOKS"
+                                                                        />
+                                                                    </div>
+                                                                    <div>
+                                                                        <label className="form-label">Category</label>
+                                                                        <input
+                                                                            type="text"
+                                                                            value={link.category || ''}
+                                                                            onChange={e => handlePortalLinkDraftChange(index, 'category', e.target.value)}
+                                                                            placeholder="Example: FINANCE"
+                                                                        />
+                                                                    </div>
+                                                                    <div>
+                                                                        <label className="form-label">Website URL</label>
+                                                                        <input
+                                                                            type="text"
+                                                                            value={link.url || ''}
+                                                                            onChange={e => handlePortalLinkDraftChange(index, 'url', e.target.value)}
+                                                                            placeholder="https://example.com"
+                                                                        />
+                                                                    </div>
+                                                                    <div style={{display: 'flex', gap: '8px', flexWrap: 'wrap'}}>
+                                                                        <button className="btn btn-secondary" onClick={() => movePortalLinkDraft(index, -1)} style={{height: '46px', paddingInline: '12px'}} disabled={index === 0}>▲</button>
+                                                                        <button className="btn btn-secondary" onClick={() => movePortalLinkDraft(index, 1)} style={{height: '46px', paddingInline: '12px'}} disabled={index === portalLinksDraft.length - 1}>▼</button>
+                                                                        <button className="btn btn-danger" onClick={() => removePortalLinkDraft(index)} style={{height: '46px'}}>
+                                                                            <Icon name="trash" size={14} /> Remove
+                                                                        </button>
+                                                                    </div>
+                                                                </div>
+                                                                <div style={{display: 'flex', alignItems: 'center', gap: '12px', marginTop: '12px', padding: '12px 14px', borderRadius: '10px', background: 'var(--bg-subtle)'}}>
+                                                                    {normalizePortalUrl(link.url) ? (
+                                                                        <img src={getPortalLinkIcon(link.url)} alt="Site icon" style={{width: '24px', height: '24px', borderRadius: '6px', flexShrink: 0}} onError={e => { e.currentTarget.style.display = 'none'; }} />
+                                                                    ) : (
+                                                                        <div style={{width: '24px', height: '24px', borderRadius: '6px', background: 'rgba(26, 111, 161, 0.12)', display: 'flex', alignItems: 'center', justifyContent: 'center', color: 'var(--logo-blue)', flexShrink: 0}}>
+                                                                            <Icon name="dashboard" size={12} />
+                                                                        </div>
+                                                                    )}
+                                                                    <div style={{minWidth: 0}}>
+                                                                        <div style={{fontWeight: '800', fontSize: '13px', letterSpacing: '0.08em', color: 'var(--text-primary)'}}>{(link.label || 'TILE LABEL').toUpperCase()}</div>
+                                                                        <div style={{fontWeight: '800', fontSize: '12px', letterSpacing: '0.08em', color: 'var(--logo-blue)', marginTop: '2px'}}>{(link.category || 'CATEGORY').toUpperCase()}</div>
+                                                                        <div style={{fontSize: '12px', color: 'var(--text-secondary)', overflow: 'hidden', textOverflow: 'ellipsis', marginTop: '4px'}}>{normalizePortalUrl(link.url) || 'https://example.com'}</div>
+                                                                    </div>
+                                                                </div>
+                                                            </div>
+                                                        ))}
+                                                    </div>
+
+                                                    <div style={{display: 'flex', gap: '12px', marginTop: '20px', flexWrap: 'wrap'}}>
+                                                        <button className="btn btn-secondary" onClick={addPortalLinkDraft}>
+                                                            <Icon name="plus" size={14} /> Add Tile
+                                                        </button>
+                                                        <button className="btn btn-primary" onClick={handleSavePortalLinks}>
+                                                            <Icon name="check" size={14} /> Save Website Tiles
+                                                        </button>
+                                                    </div>
+                                                </div>
+                                            )}
+
                                             {/* CLEAR DATA TAB */}
                                             {dataSubTab === 'clear' && (
                                                 <div>
@@ -3490,6 +4295,7 @@
                                             <div className="card-header">
                                                 <div className="card-title">Archived Tickets</div>
                                             </div>
+                                            {renderTicketControls()}
                                             <table>
                                                 <thead>
                                                     <tr>
@@ -3500,7 +4306,7 @@
                                                     </tr>
                                                 </thead>
                                                 <tbody>
-                                                    {archivedTickets.map(ticket => (
+                                                    {archivedTicketsFiltered.map(ticket => (
                                                         <tr key={ticket.id} style={{cursor: 'pointer'}} onClick={() => { setDetailTicket(ticket); setShowTicketDetail(true); }}>
                                                             <td>{ticket.client}</td>
                                                             <td>{ticket.task}</td>
@@ -3549,6 +4355,9 @@
                                                             <td>{new Date(invoice.archivedAt || invoice.archivedDate).toLocaleDateString()}</td>
                                                             <td>
                                                                 <div className="action-buttons">
+                                                                    <button className="btn btn-secondary" onClick={() => handleViewInvoice(invoice)}>
+                                                                        <Icon name="eye" size={16} /> View
+                                                                    </button>
                                                                     <button className="btn btn-secondary" onClick={() => handleUnarchiveInvoice(invoice.id)}>
                                                                         <Icon name="restore" size={16} /> Unarchive
                                                                     </button>
@@ -3573,10 +4382,17 @@
                                 {currentView === 'trash' && (
                                     <div className="card">
                                         <div className="card-header">
-                                            <div className="card-title">Trash / Recycle Bin</div>
-                                            <div style={{fontSize: '14px', color: 'var(--text-secondary)'}}>
-                                                Items in trash are soft-deleted and can be restored
+                                            <div>
+                                                <div className="card-title">Trash / Recycle Bin</div>
+                                                <div style={{fontSize: '14px', color: 'var(--text-secondary)', marginTop: '6px'}}>
+                                                    Items in trash are soft-deleted and can be restored
+                                                </div>
                                             </div>
+                                            {currentUser?.role === 'owner' && trashedItems.length > 0 && (
+                                                <button className="btn btn-danger" onClick={handleEmptyTrash}>
+                                                    <Icon name="trash" size={16} /> Empty Trash
+                                                </button>
+                                            )}
                                         </div>
                                         {trashedItems.length === 0 ? (
                                             <div style={{padding: '40px', textAlign: 'center', color: 'var(--text-secondary)'}}>
@@ -3676,7 +4492,9 @@
                                     <label>Assign To</label>
                                     <select value={newTicket.assignedTo} onChange={e => setNewTicket({...newTicket, assignedTo: e.target.value})}>
                                         <option value="">Unassigned</option>
-                                        {users.filter(u => u.role === 'staff' || u.role === 'admin').map(u => (
+                                        {users
+                                            .filter(u => u && u.id && u.name)
+                                            .map(u => (
                                             <option key={u.id} value={u.id}>{u.name}</option>
                                         ))}
                                     </select>
@@ -3729,7 +4547,9 @@
                                     <label>Assign To</label>
                                     <select value={editingTicket.assignedTo || ''} onChange={e => setEditingTicket({...editingTicket, assignedTo: e.target.value})}>
                                         <option value="">Unassigned</option>
-                                        {users.filter(u => u.role === 'staff' || u.role === 'admin').map(u => (
+                                        {users
+                                            .filter(u => u && u.id && u.name)
+                                            .map(u => (
                                             <option key={u.id} value={u.id}>{u.name}</option>
                                         ))}
                                     </select>
@@ -3765,6 +4585,7 @@
                                 <div className="modal-actions">
                                     <button className="btn btn-secondary" onClick={() => setShowResolution(false)}>Cancel</button>
                                     <button className="btn btn-primary" onClick={handleCompleteTicket}>Complete</button>
+                                    <button className="btn btn-primary" onClick={handleCompleteAndInvoice}>Complete & Invoice</button>
                                 </div>
                             </div>
                         </div>
@@ -3772,15 +4593,19 @@
 
                     {/* New Invoice Modal */}
                     {showNewInvoice && (
-                        <div className="modal-overlay" onClick={() => setShowNewInvoice(false)}>
+                        <div className="modal-overlay" onClick={closeNewInvoiceModal}>
                             <div className="modal" onClick={e => e.stopPropagation()}>
                                 <div className="modal-header">
                                     <div className="modal-title">New Invoice</div>
-                                    <button className="close-btn" onClick={() => setShowNewInvoice(false)}><Icon name="close" size={16} /></button>
+                                    <button className="close-btn" onClick={closeNewInvoiceModal}><Icon name="close" size={16} /></button>
                                 </div>
                                 <div className="form-group">
                                     <label>Client Name *</label>
                                     <input value={newInvoice.client} onChange={e => setNewInvoice({...newInvoice, client: e.target.value})} />
+                                </div>
+                                <div className="form-group">
+                                    <label>Invoice Date</label>
+                                    <input type="date" value={newInvoice.invoiceDate || ''} onChange={e => setNewInvoice({...newInvoice, invoiceDate: e.target.value})} />
                                 </div>
                                 <div className="form-group">
                                     <label>Payment Terms</label>
@@ -3887,7 +4712,7 @@
                                 </div>
 
                                 <div className="modal-actions">
-                                    <button className="btn btn-secondary" onClick={() => setShowNewInvoice(false)}>Cancel</button>
+                                    <button className="btn btn-secondary" onClick={closeNewInvoiceModal}>Cancel</button>
                                     <button className="btn btn-primary" onClick={handleCreateInvoice}>Create Invoice</button>
                                 </div>
                             </div>
@@ -3905,6 +4730,10 @@
                                 <div className="form-group">
                                     <label>Client Name *</label>
                                     <input value={editingInvoice.client} onChange={e => setEditingInvoice({...editingInvoice, client: e.target.value})} />
+                                </div>
+                                <div className="form-group">
+                                    <label>Invoice Date</label>
+                                    <input type="date" value={editingInvoice.invoiceDate || ''} onChange={e => setEditingInvoice({...editingInvoice, invoiceDate: e.target.value})} />
                                 </div>
                                 <div className="form-group">
                                     <label>Payment Terms</label>
@@ -4120,6 +4949,74 @@
                     )}
 
                     {/* Ticket Detail Modal */}
+
+                    {showInvoiceDetail && detailInvoice && (
+                        <div className="modal-overlay" onClick={() => setShowInvoiceDetail(false)}>
+                            <div className="modal" onClick={e => e.stopPropagation()}>
+                                <div className="modal-header">
+                                    <div className="modal-title">Invoice Details</div>
+                                    <button className="close-btn" onClick={() => setShowInvoiceDetail(false)}><Icon name="close" size={16} /></button>
+                                </div>
+                                <div style={{display: 'grid', gap: '16px'}}>
+                                    <div className="invoice-section">
+                                        <div style={{display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(220px, 1fr))', gap: '16px'}}>
+                                            <div>
+                                                <div className="form-label">Client</div>
+                                                <div style={{fontWeight: '600', color: 'var(--text-primary)'}}>{detailInvoice.client || 'N/A'}</div>
+                                            </div>
+                                            <div>
+                                                <div className="form-label">Invoice Date</div>
+                                                <div style={{fontWeight: '600', color: 'var(--text-primary)'}}>{formatInvoiceDate(detailInvoice)}</div>
+                                            </div>
+                                            <div>
+                                                <div className="form-label">Payment Terms</div>
+                                                <div style={{fontWeight: '600', color: 'var(--text-primary)', textTransform: 'capitalize'}}>{detailInvoice.paymentTerms?.replace('_', ' ') || 'N/A'}</div>
+                                            </div>
+                                            <div>
+                                                <div className="form-label">Status</div>
+                                                <div style={{fontWeight: '600', color: 'var(--text-primary)', textTransform: 'capitalize'}}>{detailInvoice.status || (detailInvoice.paidDate || detailInvoice.paidAt ? 'paid' : 'active')}</div>
+                                            </div>
+                                            <div>
+                                                <div className="form-label">Contact Name</div>
+                                                <div style={{fontWeight: '500', color: 'var(--text-primary)'}}>{detailInvoice.contactName || 'N/A'}</div>
+                                            </div>
+                                            <div>
+                                                <div className="form-label">Contact Email</div>
+                                                <div style={{fontWeight: '500', color: 'var(--text-primary)'}}>{detailInvoice.contactEmail || 'N/A'}</div>
+                                            </div>
+                                            <div>
+                                                <div className="form-label">Contact Phone</div>
+                                                <div style={{fontWeight: '500', color: 'var(--text-primary)'}}>{detailInvoice.contactPhone || 'N/A'}</div>
+                                            </div>
+                                            <div>
+                                                <div className="form-label">Invoice Total</div>
+                                                <div style={{fontWeight: '700', color: 'var(--logo-blue)', fontSize: '20px'}}>£{(parseFloat(detailInvoice.totalAmount) || 0).toFixed(2)}</div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div>
+                                        <div className="form-label">Invoice Items</div>
+                                        <div style={{display: 'grid', gap: '12px'}}>
+                                            {(detailInvoice.sections || []).map((section, index) => (
+                                                <div className="invoice-section" key={index}>
+                                                    <div style={{display: 'flex', justifyContent: 'space-between', gap: '16px', alignItems: 'center', flexWrap: 'wrap'}}>
+                                                        <div>
+                                                            <div style={{fontWeight: '600', color: 'var(--text-primary)'}}>{section.description || 'Untitled item'}</div>
+                                                            <div style={{fontSize: '13px', color: 'var(--text-secondary)', textTransform: 'capitalize'}}>
+                                                                {section.type === 'fixed' ? 'Fixed charge' : `${section.hours || 0} hour(s) × £${parseFloat(section.rate || 0).toFixed(2)}`}
+                                                            </div>
+                                                        </div>
+                                                        <div style={{fontWeight: '700', color: 'var(--logo-blue)'}}>£{(parseFloat(section.amount) || 0).toFixed(2)}</div>
+                                                    </div>
+                                                </div>
+                                            ))}
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    )}
+
                     {showTicketDetail && detailTicket && (
                         <div className="modal-overlay" onClick={() => setShowTicketDetail(false)}>
                             <div className="modal" onClick={e => e.stopPropagation()} style={{maxWidth: '600px'}}>

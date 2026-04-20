@@ -1692,6 +1692,8 @@
             const [showNewInvoice, setShowNewInvoice] = useState(false);
             const [showEditInvoice, setShowEditInvoice] = useState(false);
             const [editingInvoice, setEditingInvoice] = useState(null);
+            const [showInvoiceDetail, setShowInvoiceDetail] = useState(false);
+            const [detailInvoice, setDetailInvoice] = useState(null);
             const [showAddStaff, setShowAddStaff] = useState(false);
             const [showEditUser, setShowEditUser] = useState(false);
             const [editingUser, setEditingUser] = useState(null);
@@ -1729,6 +1731,42 @@
             // Show alert
             const showAlert = (message, type = 'success') => {
                 setAlert({ message, type });
+            };
+
+            const getEmptyInvoice = () => ({
+                client: '', invoiceDate: '', paymentTerms: 'now', inQuickBooks: 'no', paymentDeadline: '', contactName: '', contactEmail: '', contactPhone: ''
+            });
+
+            const getEmptyInvoiceSections = () => ([{ description: '', type: 'hourly', rate: '', hours: '', amount: '' }]);
+
+            const openNewInvoiceModal = () => {
+                setNewInvoice(getEmptyInvoice());
+                setInvoiceSections(getEmptyInvoiceSections());
+                setShowNewInvoice(true);
+            };
+
+            const closeNewInvoiceModal = () => {
+                setShowNewInvoice(false);
+                setNewInvoice(getEmptyInvoice());
+                setInvoiceSections(getEmptyInvoiceSections());
+            };
+
+            const normalizeDateInput = (value) => {
+                if (!value) return '';
+                if (typeof value === 'string') return value.slice(0, 10);
+                return new Date(value).toISOString().slice(0, 10);
+            };
+
+            const formatInvoiceDate = (invoice) => {
+                const raw = invoice?.invoiceDate || invoice?.date || invoice?.createdAt;
+                if (!raw) return 'N/A';
+                const d = new Date(raw);
+                return isNaN(d.getTime()) ? 'N/A' : d.toLocaleDateString('en-GB');
+            };
+
+            const handleViewInvoice = (invoice) => {
+                setDetailInvoice(invoice);
+                setShowInvoiceDetail(true);
             };
 
             const createEmptyPortalLink = () => ({ label: '', category: '', url: '', sortOrder: 0 });
@@ -2062,9 +2100,7 @@
                         sections: invoiceSections
                     });
                     showAlert('Invoice created successfully!');
-                    setShowNewInvoice(false);
-                    setNewInvoice({ client: '', invoiceDate: '', paymentTerms: 'now', inQuickBooks: 'no', paymentDeadline: '', contactName: '', contactEmail: '', contactPhone: '' });
-                    setInvoiceSections([{ description: '', type: 'hourly', rate: '', hours: '', amount: '' }]);
+                    closeNewInvoiceModal();
                     loadData();
                 } catch (error) {
                     console.error('Invoice creation error:', error);
@@ -2076,8 +2112,8 @@
 
             // Open edit invoice modal
             const handleEditInvoice = (invoice) => {
-                setEditingInvoice(invoice);
-                setInvoiceSections(invoice.sections || [{ description: '', type: 'hourly', rate: '', hours: '', amount: '' }]);
+                setEditingInvoice({ ...invoice, invoiceDate: normalizeDateInput(invoice.invoiceDate) });
+                setInvoiceSections((invoice.sections && invoice.sections.length ? invoice.sections : getEmptyInvoiceSections()).map(section => ({ ...section })));
                 setShowEditInvoice(true);
             };
 
@@ -2099,7 +2135,7 @@
                     showAlert('Invoice updated successfully!');
                     setShowEditInvoice(false);
                     setEditingInvoice(null);
-                    setInvoiceSections([{ description: '', type: 'hourly', rate: '', hours: '', amount: '' }]);
+                    setInvoiceSections(getEmptyInvoiceSections());
                     loadData();
                 } catch (error) {
                     showAlert(error.message, 'error');
@@ -3308,7 +3344,7 @@
                                     <div className="card">
                                         <div className="card-header">
                                             <div className="card-title">Active Invoices</div>
-                                            <button className="btn btn-primary" onClick={() => setShowNewInvoice(true)}>
+                                            <button className="btn btn-primary" onClick={openNewInvoiceModal}>
                                                 + New Invoice
                                             </button>
                                         </div>
@@ -3327,10 +3363,13 @@
                                                     <tr key={invoice.id}>
                                                         <td>{invoice.client}</td>
                                                         <td>£{(parseFloat(invoice.totalAmount) || 0).toFixed(2)}</td>
-                                                        <td>{new Date(invoice.createdAt || invoice.date).toLocaleDateString()}</td>
+                                                        <td>{formatInvoiceDate(invoice)}</td>
                                                         <td>{invoice.paymentTerms?.replace('_', ' ') || 'N/A'}</td>
                                                         <td>
                                                             <div className="action-buttons">
+                                                                <button className="btn btn-secondary" onClick={() => handleViewInvoice(invoice)}>
+                                                                    <Icon name="eye" size={16} /> View
+                                                                </button>
                                                                 <button className="btn btn-secondary" onClick={() => handleEditInvoice(invoice)}>
                                                                     <Icon name="edit" size={16} /> Edit
                                                                 </button>
@@ -3373,10 +3412,13 @@
                                                     <tr key={invoice.id}>
                                                         <td>{invoice.client}</td>
                                                         <td>£{(parseFloat(invoice.totalAmount) || 0).toFixed(2)}</td>
-                                                        <td>{new Date(invoice.createdAt || invoice.date).toLocaleDateString()}</td>
+                                                        <td>{formatInvoiceDate(invoice)}</td>
                                                         <td>{new Date(invoice.paidAt || invoice.paidDate).toLocaleDateString()}</td>
                                                         <td>
                                                             <div className="action-buttons">
+                                                                <button className="btn btn-secondary" onClick={() => handleViewInvoice(invoice)}>
+                                                                    <Icon name="eye" size={16} /> View
+                                                                </button>
                                                                 <button className="btn btn-secondary" onClick={() => handleArchiveInvoice(invoice.id)}>
                                                                     <Icon name="archive" size={16} /> Archive
                                                                 </button>
@@ -3891,6 +3933,9 @@
                                                             <td>{new Date(invoice.archivedAt || invoice.archivedDate).toLocaleDateString()}</td>
                                                             <td>
                                                                 <div className="action-buttons">
+                                                                    <button className="btn btn-secondary" onClick={() => handleViewInvoice(invoice)}>
+                                                                        <Icon name="eye" size={16} /> View
+                                                                    </button>
                                                                     <button className="btn btn-secondary" onClick={() => handleUnarchiveInvoice(invoice.id)}>
                                                                         <Icon name="restore" size={16} /> Unarchive
                                                                     </button>
@@ -4114,11 +4159,11 @@
 
                     {/* New Invoice Modal */}
                     {showNewInvoice && (
-                        <div className="modal-overlay" onClick={() => setShowNewInvoice(false)}>
+                        <div className="modal-overlay" onClick={closeNewInvoiceModal}>
                             <div className="modal" onClick={e => e.stopPropagation()}>
                                 <div className="modal-header">
                                     <div className="modal-title">New Invoice</div>
-                                    <button className="close-btn" onClick={() => setShowNewInvoice(false)}><Icon name="close" size={16} /></button>
+                                    <button className="close-btn" onClick={closeNewInvoiceModal}><Icon name="close" size={16} /></button>
                                 </div>
                                 <div className="form-group">
                                     <label>Client Name *</label>
@@ -4233,7 +4278,7 @@
                                 </div>
 
                                 <div className="modal-actions">
-                                    <button className="btn btn-secondary" onClick={() => setShowNewInvoice(false)}>Cancel</button>
+                                    <button className="btn btn-secondary" onClick={closeNewInvoiceModal}>Cancel</button>
                                     <button className="btn btn-primary" onClick={handleCreateInvoice}>Create Invoice</button>
                                 </div>
                             </div>
@@ -4470,6 +4515,74 @@
                     )}
 
                     {/* Ticket Detail Modal */}
+
+                    {showInvoiceDetail && detailInvoice && (
+                        <div className="modal-overlay" onClick={() => setShowInvoiceDetail(false)}>
+                            <div className="modal" onClick={e => e.stopPropagation()}>
+                                <div className="modal-header">
+                                    <div className="modal-title">Invoice Details</div>
+                                    <button className="close-btn" onClick={() => setShowInvoiceDetail(false)}><Icon name="close" size={16} /></button>
+                                </div>
+                                <div style={{display: 'grid', gap: '16px'}}>
+                                    <div className="invoice-section">
+                                        <div style={{display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(220px, 1fr))', gap: '16px'}}>
+                                            <div>
+                                                <div className="form-label">Client</div>
+                                                <div style={{fontWeight: '600', color: 'var(--text-primary)'}}>{detailInvoice.client || 'N/A'}</div>
+                                            </div>
+                                            <div>
+                                                <div className="form-label">Invoice Date</div>
+                                                <div style={{fontWeight: '600', color: 'var(--text-primary)'}}>{formatInvoiceDate(detailInvoice)}</div>
+                                            </div>
+                                            <div>
+                                                <div className="form-label">Payment Terms</div>
+                                                <div style={{fontWeight: '600', color: 'var(--text-primary)', textTransform: 'capitalize'}}>{detailInvoice.paymentTerms?.replace('_', ' ') || 'N/A'}</div>
+                                            </div>
+                                            <div>
+                                                <div className="form-label">Status</div>
+                                                <div style={{fontWeight: '600', color: 'var(--text-primary)', textTransform: 'capitalize'}}>{detailInvoice.status || (detailInvoice.paidDate || detailInvoice.paidAt ? 'paid' : 'active')}</div>
+                                            </div>
+                                            <div>
+                                                <div className="form-label">Contact Name</div>
+                                                <div style={{fontWeight: '500', color: 'var(--text-primary)'}}>{detailInvoice.contactName || 'N/A'}</div>
+                                            </div>
+                                            <div>
+                                                <div className="form-label">Contact Email</div>
+                                                <div style={{fontWeight: '500', color: 'var(--text-primary)'}}>{detailInvoice.contactEmail || 'N/A'}</div>
+                                            </div>
+                                            <div>
+                                                <div className="form-label">Contact Phone</div>
+                                                <div style={{fontWeight: '500', color: 'var(--text-primary)'}}>{detailInvoice.contactPhone || 'N/A'}</div>
+                                            </div>
+                                            <div>
+                                                <div className="form-label">Invoice Total</div>
+                                                <div style={{fontWeight: '700', color: 'var(--logo-blue)', fontSize: '20px'}}>£{(parseFloat(detailInvoice.totalAmount) || 0).toFixed(2)}</div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div>
+                                        <div className="form-label">Invoice Items</div>
+                                        <div style={{display: 'grid', gap: '12px'}}>
+                                            {(detailInvoice.sections || []).map((section, index) => (
+                                                <div className="invoice-section" key={index}>
+                                                    <div style={{display: 'flex', justifyContent: 'space-between', gap: '16px', alignItems: 'center', flexWrap: 'wrap'}}>
+                                                        <div>
+                                                            <div style={{fontWeight: '600', color: 'var(--text-primary)'}}>{section.description || 'Untitled item'}</div>
+                                                            <div style={{fontSize: '13px', color: 'var(--text-secondary)', textTransform: 'capitalize'}}>
+                                                                {section.type === 'fixed' ? 'Fixed charge' : `${section.hours || 0} hour(s) × £${parseFloat(section.rate || 0).toFixed(2)}`}
+                                                            </div>
+                                                        </div>
+                                                        <div style={{fontWeight: '700', color: 'var(--logo-blue)'}}>£{(parseFloat(section.amount) || 0).toFixed(2)}</div>
+                                                    </div>
+                                                </div>
+                                            ))}
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    )}
+
                     {showTicketDetail && detailTicket && (
                         <div className="modal-overlay" onClick={() => setShowTicketDetail(false)}>
                             <div className="modal" onClick={e => e.stopPropagation()} style={{maxWidth: '600px'}}>

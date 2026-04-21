@@ -2395,6 +2395,173 @@
             }
         }
 
+    
+        /* Mobile fine-tuning v5 */
+        @media (max-width: 768px) {
+            .modal-overlay {
+                align-items: flex-start !important;
+                justify-content: center !important;
+                overflow-y: auto !important;
+                overflow-x: hidden !important;
+                padding: 12px 0 max(18px, env(safe-area-inset-bottom)) !important;
+                -webkit-overflow-scrolling: touch;
+            }
+
+            .modal {
+                margin: 0 auto !important;
+                max-height: none !important;
+                overflow-y: visible !important;
+            }
+
+            .tiles-panel,
+            .tiles-panel .shortcut-grid,
+            .tiles-panel .shortcut-empty,
+            .shortcut-grid,
+            .shortcut-empty {
+                display: none !important;
+            }
+
+            .ticket-table-completed td,
+            .ticket-table-completed td:last-child {
+                grid-template-columns: 96px minmax(0, 1fr) !important;
+            }
+
+            .ticket-table-completed td::before {
+                white-space: nowrap !important;
+                word-break: normal !important;
+                overflow-wrap: normal !important;
+                letter-spacing: 0.04em !important;
+                font-size: 10px !important;
+            }
+
+            .mobile-invoice-table,
+            .mobile-invoice-table thead,
+            .mobile-invoice-table tbody,
+            .mobile-invoice-table tr,
+            .mobile-invoice-table th,
+            .mobile-invoice-table td {
+                display: block;
+                width: 100%;
+                max-width: 100%;
+                min-width: 0;
+                box-sizing: border-box;
+            }
+
+            .mobile-invoice-table {
+                border-spacing: 0;
+                white-space: normal !important;
+                overflow: visible !important;
+                background: transparent;
+            }
+
+            .mobile-invoice-table thead {
+                display: none;
+            }
+
+            .mobile-invoice-table tbody {
+                display: grid;
+                gap: 12px;
+            }
+
+            .mobile-invoice-table tr {
+                background: var(--bg-secondary);
+                border: 1px solid var(--border-color);
+                border-radius: 14px;
+                padding: 10px 12px;
+                box-shadow: var(--shadow);
+                overflow: hidden;
+            }
+
+            .mobile-invoice-table td {
+                display: grid;
+                grid-template-columns: 92px minmax(0, 1fr);
+                gap: 10px;
+                align-items: start;
+                border: 0;
+                padding: 8px 0;
+                min-height: 34px;
+                text-align: left;
+                white-space: normal !important;
+                word-break: break-word;
+                overflow-wrap: anywhere;
+            }
+
+            .mobile-invoice-table td::before {
+                content: '';
+                display: block;
+                font-size: 11px;
+                line-height: 1.25;
+                font-weight: 800;
+                letter-spacing: 0.06em;
+                text-transform: uppercase;
+                color: var(--text-secondary);
+                white-space: nowrap;
+            }
+
+            .invoice-table-active td:nth-child(1)::before,
+            .invoice-table-paid td:nth-child(1)::before,
+            .invoice-table-archived td:nth-child(1)::before { content: 'Client'; }
+
+            .invoice-table-active td:nth-child(2)::before,
+            .invoice-table-paid td:nth-child(2)::before,
+            .invoice-table-archived td:nth-child(2)::before { content: 'Amount'; }
+
+            .invoice-table-active td:nth-child(3)::before,
+            .invoice-table-paid td:nth-child(3)::before { content: 'Date'; }
+
+            .invoice-table-active td:nth-child(4)::before { content: 'Terms'; }
+            .invoice-table-paid td:nth-child(4)::before { content: 'Paid Date'; }
+            .invoice-table-archived td:nth-child(3)::before { content: 'Archived'; }
+
+            .invoice-table-active td:nth-child(5)::before,
+            .invoice-table-paid td:nth-child(5)::before,
+            .invoice-table-archived td:nth-child(4)::before { content: 'Actions'; }
+
+            .mobile-invoice-table .action-buttons {
+                display: grid !important;
+                grid-template-columns: 1fr !important;
+                gap: 8px !important;
+                width: 100% !important;
+                max-width: 100% !important;
+            }
+
+            .mobile-invoice-table .action-buttons .btn {
+                width: 100% !important;
+                max-width: 100% !important;
+                min-width: 0 !important;
+                white-space: normal !important;
+                justify-content: center !important;
+                padding-left: 10px !important;
+                padding-right: 10px !important;
+            }
+
+            .mobile-invoice-table td:last-child {
+                display: block;
+                padding-top: 12px;
+            }
+
+            .mobile-invoice-table td:last-child::before {
+                display: block;
+                margin-bottom: 8px;
+            }
+        }
+
+        @media (max-width: 420px) {
+            .ticket-table-completed td,
+            .ticket-table-completed td:last-child {
+                grid-template-columns: 88px minmax(0, 1fr) !important;
+            }
+
+            .mobile-invoice-table td {
+                grid-template-columns: 82px minmax(0, 1fr);
+                gap: 8px;
+            }
+
+            .mobile-invoice-table td::before {
+                font-size: 10px;
+            }
+        }
+
     </style>
 </head>
 <body class="light">
@@ -4519,7 +4686,7 @@
                                                 + New Invoice
                                             </button>
                                         </div>
-                                        <table>
+                                        <table className="mobile-invoice-table invoice-table-active">
                                             <thead>
                                                 <tr>
                                                     <th>Client</th>
@@ -4568,7 +4735,7 @@
                                         <div className="card-header">
                                             <div className="card-title">Paid Invoices</div>
                                         </div>
-                                        <table>
+                                        <table className="mobile-invoice-table invoice-table-paid">
                                             <thead>
                                                 <tr>
                                                     <th>Client</th>
@@ -5088,7 +5255,7 @@
                                             <div className="card-header">
                                                 <div className="card-title">Archived Invoices</div>
                                             </div>
-                                            <table>
+                                            <table className="mobile-invoice-table invoice-table-archived">
                                                 <thead>
                                                     <tr>
                                                         <th>Client</th>

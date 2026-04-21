@@ -2159,6 +2159,127 @@
             }
         }
 
+    
+        /* Mobile fine-tuning v3 */
+        @media (max-width: 768px) {
+            .topbar {
+                padding: 0 12px 0 84px !important;
+                gap: 12px;
+            }
+
+            .page-title {
+                font-size: 16px;
+                line-height: 1.2;
+            }
+
+            .content-area {
+                padding: 14px 10px 18px;
+            }
+
+            .modal,
+            .modal * {
+                max-width: 100%;
+            }
+
+            .modal {
+                width: calc(100vw - 18px);
+                max-height: calc(100vh - 18px);
+                padding: 18px 12px;
+                overflow-x: hidden;
+            }
+
+            .form-group,
+            .invoice-section,
+            .invoice-section-header,
+            .invoice-section-fields,
+            .ticket-controls,
+            .card,
+            .card-header {
+                min-width: 0;
+            }
+
+            input,
+            select,
+            textarea {
+                min-width: 0;
+                max-width: 100%;
+            }
+
+            input[type="date"],
+            input[type="datetime-local"],
+            input[type="month"],
+            input[type="time"] {
+                width: 100% !important;
+                min-width: 0 !important;
+                max-width: 100% !important;
+                box-sizing: border-box !important;
+                -webkit-appearance: none;
+                appearance: none;
+            }
+
+            .mobile-ticket-table tr {
+                width: 100%;
+                max-width: 100%;
+                overflow: hidden;
+            }
+
+            .mobile-ticket-table td {
+                display: grid;
+                grid-template-columns: 84px minmax(0, 1fr);
+                gap: 10px;
+                align-items: start;
+                padding: 8px 0;
+                min-width: 0;
+                white-space: normal !important;
+                overflow-wrap: anywhere;
+                word-break: break-word;
+            }
+
+            .mobile-ticket-table td::before {
+                position: static;
+                width: auto;
+                display: block;
+                margin: 0;
+            }
+
+            .mobile-ticket-table td:last-child {
+                display: block;
+                padding-top: 12px;
+            }
+
+            .mobile-ticket-table td:last-child::before {
+                display: block;
+                margin-bottom: 8px;
+            }
+
+            .mobile-ticket-table .action-buttons {
+                grid-template-columns: 1fr;
+            }
+
+            .mobile-ticket-table .action-buttons .btn {
+                min-width: 0;
+            }
+        }
+
+        @media (max-width: 420px) {
+            .topbar {
+                padding-left: 82px !important;
+            }
+
+            .page-title {
+                font-size: 15px;
+            }
+
+            .mobile-ticket-table td {
+                grid-template-columns: 78px minmax(0, 1fr);
+                gap: 8px;
+            }
+
+            .mobile-ticket-table td::before {
+                font-size: 10px;
+            }
+        }
+
     </style>
 </head>
 <body class="light">

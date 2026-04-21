@@ -1645,6 +1645,284 @@
             0%, 100% { opacity: 1; }
             50% { opacity: 0.5; }
         }
+
+
+        /* Mobile fit-and-condense patch */
+        @media (max-width: 768px) {
+            html, body {
+                width: 100%;
+                max-width: 100%;
+                overflow-x: hidden;
+            }
+
+            .app-container {
+                width: 100%;
+                max-width: 100%;
+                min-height: 100svh;
+                height: 100svh;
+            }
+
+            .sidebar {
+                width: min(88vw, 320px);
+                height: 100svh;
+                max-height: 100svh;
+            }
+
+            .sidebar-header {
+                padding: 18px 16px;
+            }
+
+            .nav {
+                padding: 12px;
+            }
+
+            .nav-item {
+                padding: 10px 12px;
+                margin-bottom: 2px;
+            }
+
+            .sidebar-footer {
+                padding: 12px;
+            }
+
+            .main-content,
+            .content-area,
+            .card,
+            .modal,
+            .topbar,
+            .card-header,
+            .invoice-section,
+            .invoice-section-header,
+            .invoice-section-fields,
+            .modal-actions,
+            .action-buttons,
+            .dashboard-top-layout,
+            .events-panel,
+            .tiles-panel,
+            .shortcut-grid,
+            .shortcut-tile {
+                min-width: 0;
+            }
+
+            .topbar {
+                min-height: 64px;
+                height: auto;
+                padding: 10px 14px 10px 58px !important;
+                gap: 10px;
+                align-items: flex-start;
+                flex-wrap: wrap;
+            }
+
+            .page-title {
+                font-size: 18px;
+                line-height: 1.2;
+                padding-top: 2px;
+                word-break: break-word;
+            }
+
+            .topbar-actions {
+                gap: 8px;
+                margin-left: auto;
+                flex-wrap: wrap;
+                justify-content: flex-end;
+            }
+
+            .icon-btn {
+                width: 36px;
+                height: 36px;
+                border-radius: 9px;
+            }
+
+            .content-area {
+                padding: 14px;
+            }
+
+            .stats-grid,
+            .dashboard-top-layout,
+            .shortcut-grid {
+                gap: 12px;
+            }
+
+            .stat-card,
+            .card,
+            .events-panel,
+            .shortcut-tile {
+                border-radius: 14px;
+            }
+
+            .stat-card,
+            .card,
+            .events-panel {
+                padding: 14px;
+            }
+
+            .card-header,
+            .modal-header,
+            .invoice-section-header,
+            .invoice-section-fields,
+            .modal-actions {
+                flex-direction: column;
+                align-items: stretch;
+                gap: 10px;
+            }
+
+            .card-title,
+            .modal-title {
+                font-size: 18px;
+                line-height: 1.2;
+            }
+
+            .btn,
+            .action-buttons .btn {
+                width: 100%;
+                justify-content: center;
+                padding: 10px 12px;
+            }
+
+            .action-buttons {
+                display: grid;
+                grid-template-columns: 1fr;
+                gap: 6px;
+                width: 100%;
+            }
+
+            .table-responsive {
+                width: 100%;
+                overflow-x: auto;
+                overflow-y: hidden;
+                -webkit-overflow-scrolling: touch;
+            }
+
+            table {
+                width: 100%;
+                min-width: 560px;
+                table-layout: auto;
+                white-space: nowrap;
+                font-size: 13px;
+            }
+
+            th {
+                padding: 10px 8px;
+                font-size: 12px;
+            }
+
+            td {
+                padding: 10px 8px;
+                font-size: 13px;
+                vertical-align: top;
+            }
+
+            td .btn,
+            td .urgency-badge,
+            td .role-badge {
+                white-space: nowrap;
+            }
+
+            .modal-overlay {
+                align-items: flex-start;
+                padding: 10px;
+            }
+
+            .modal {
+                width: 100%;
+                max-width: 100%;
+                max-height: calc(100svh - 20px);
+                border-radius: 16px;
+                padding: 16px;
+                margin: 0;
+            }
+
+            .form-group {
+                margin-bottom: 14px;
+            }
+
+            input,
+            select,
+            textarea {
+                padding: 11px 12px;
+                font-size: 16px;
+            }
+
+            .invoice-section {
+                padding: 12px;
+                margin-bottom: 12px;
+            }
+
+            .invoice-section-header,
+            .invoice-section-fields {
+                display: grid;
+                grid-template-columns: 1fr;
+            }
+
+            .invoice-amount {
+                width: 100%;
+                text-align: center;
+            }
+
+            .event-row {
+                padding: 12px 14px;
+            }
+
+            .events-panel-header {
+                padding: 16px 14px 12px;
+            }
+
+            .events-panel-title {
+                font-size: 20px;
+            }
+
+            .connection-status {
+                right: 12px;
+                bottom: 12px;
+                left: 12px;
+                width: auto;
+                justify-content: center;
+            }
+        }
+
+        @media (max-width: 560px) {
+            .mobile-menu-btn {
+                top: 10px;
+                left: 10px;
+                padding: 9px 11px;
+            }
+
+            .topbar {
+                padding: 10px 12px 10px 54px !important;
+            }
+
+            .content-area {
+                padding: 10px;
+            }
+
+            .stat-card,
+            .card,
+            .events-panel {
+                padding: 12px;
+            }
+
+            .stat-value {
+                font-size: 30px;
+            }
+
+            .page-title,
+            .card-title,
+            .modal-title {
+                font-size: 17px;
+            }
+
+            table {
+                min-width: 500px;
+                font-size: 12px;
+            }
+
+            th,
+            td {
+                padding-left: 6px;
+                padding-right: 6px;
+            }
+        }
+
     </style>
 </head>
 <body class="light">

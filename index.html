@@ -2847,6 +2847,142 @@
             }
         }
 
+
+        /* Final responsive table/button fixes v3 */
+        .mobile-ticket-table,
+        .mobile-invoice-table,
+        .clients-table {
+            width: 100% !important;
+            max-width: 100% !important;
+            min-width: 0 !important;
+            table-layout: fixed !important;
+        }
+
+        .mobile-ticket-table th,
+        .mobile-ticket-table td,
+        .mobile-invoice-table th,
+        .mobile-invoice-table td,
+        .clients-table th,
+        .clients-table td {
+            min-width: 0 !important;
+            box-sizing: border-box !important;
+            overflow-wrap: anywhere;
+            word-break: normal;
+        }
+
+        .mobile-ticket-table th:last-child,
+        .mobile-ticket-table td:last-child {
+            width: 260px !important;
+            max-width: 260px !important;
+        }
+
+        .mobile-ticket-table .action-buttons {
+            display: grid !important;
+            grid-template-columns: repeat(2, minmax(0, 1fr)) !important;
+            gap: 8px !important;
+            width: 100% !important;
+            max-width: 250px !important;
+            align-items: stretch !important;
+            justify-content: stretch !important;
+        }
+
+        .mobile-ticket-table .action-buttons .btn {
+            width: 100% !important;
+            min-width: 0 !important;
+            max-width: 100% !important;
+            justify-content: center !important;
+            white-space: normal !important;
+            line-height: 1.18 !important;
+            padding: 9px 10px !important;
+        }
+
+        .mobile-ticket-table .action-buttons .btn:last-child:nth-child(odd) {
+            grid-column: 1 / -1;
+        }
+
+        .clients-table th:last-child,
+        .clients-table td:last-child {
+            width: 170px !important;
+            max-width: 170px !important;
+        }
+
+        .clients-table .action-buttons {
+            display: grid !important;
+            grid-template-columns: 1fr !important;
+            gap: 8px !important;
+            width: 150px !important;
+            max-width: 100% !important;
+            justify-content: stretch !important;
+        }
+
+        .clients-table .action-buttons .btn {
+            width: 100% !important;
+            min-width: 0 !important;
+            justify-content: center !important;
+            white-space: normal !important;
+            line-height: 1.18 !important;
+            padding: 9px 10px !important;
+        }
+
+        @media (max-width: 1180px) and (min-width: 769px) {
+            .mobile-ticket-table th:last-child,
+            .mobile-ticket-table td:last-child {
+                width: 230px !important;
+                max-width: 230px !important;
+            }
+
+            .mobile-ticket-table .action-buttons {
+                max-width: 220px !important;
+            }
+
+            .mobile-ticket-table .action-buttons .btn {
+                font-size: 12px !important;
+                padding: 8px 8px !important;
+            }
+        }
+
+        @media (max-width: 768px) {
+            .mobile-ticket-table,
+            .mobile-invoice-table,
+            .clients-table {
+                table-layout: auto !important;
+            }
+
+            .mobile-ticket-table th:last-child,
+            .mobile-ticket-table td:last-child,
+            .clients-table th:last-child,
+            .clients-table td:last-child {
+                width: 100% !important;
+                max-width: 100% !important;
+            }
+
+            .mobile-ticket-table .action-buttons,
+            .mobile-invoice-table .action-buttons {
+                grid-template-columns: repeat(2, minmax(0, 1fr)) !important;
+                width: 100% !important;
+                max-width: 100% !important;
+            }
+
+            .mobile-ticket-table .action-buttons .btn:last-child:nth-child(odd),
+            .mobile-invoice-table .action-buttons .btn:last-child:nth-child(odd) {
+                grid-column: 1 / -1;
+            }
+
+            .clients-table .action-buttons {
+                grid-template-columns: repeat(2, minmax(0, 1fr)) !important;
+                width: 100% !important;
+                max-width: 100% !important;
+            }
+        }
+
+        @media (max-width: 380px) {
+            .mobile-ticket-table .action-buttons,
+            .mobile-invoice-table .action-buttons,
+            .clients-table .action-buttons {
+                grid-template-columns: 1fr !important;
+            }
+        }
+
     </style>
 </head>
 <body class="light">
@@ -3204,7 +3340,7 @@
                 .filter(client => getClientName(client))
                 .sort((a, b) => getClientName(a).localeCompare(getClientName(b)));
 
-            const ClientField = ({ value, mode, onChange, onModeChange, label = 'Client Name *' }) => {
+            const renderClientField = ({ value, mode, onChange, onModeChange, label = 'Client Name *' }) => {
                 const activeMode = mode || getDefaultClientMode(value);
                 const switchMode = (nextMode) => {
                     onModeChange(nextMode);
@@ -6070,12 +6206,12 @@
                                     <div className="modal-title">New Ticket</div>
                                     <button className="close-btn" onClick={() => setShowNewTicket(false)}><Icon name="close" size={16} /></button>
                                 </div>
-                                <ClientField
-                                    value={newTicket.client}
-                                    mode={newTicket.clientMode}
-                                    onChange={value => setNewTicket({...newTicket, client: value})}
-                                    onModeChange={mode => setNewTicket({...newTicket, clientMode: mode, client: mode === 'existing' ? '' : newTicket.client})}
-                                />
+                                {renderClientField({
+                                    value: newTicket.client,
+                                    mode: newTicket.clientMode,
+                                    onChange: value => setNewTicket({...newTicket, client: value}),
+                                    onModeChange: mode => setNewTicket({...newTicket, clientMode: mode, client: mode === 'existing' ? '' : newTicket.client})
+                                })}
                                 <div className="form-group">
                                     <label>Task Description *</label>
                                     <input value={newTicket.task} onChange={e => setNewTicket({...newTicket, task: e.target.value})} />
@@ -6127,12 +6263,12 @@
                                     <div className="modal-title">Edit Ticket</div>
                                     <button className="close-btn" onClick={() => setShowEditTicket(false)}><Icon name="close" size={16} /></button>
                                 </div>
-                                <ClientField
-                                    value={editingTicket.client}
-                                    mode={editingTicket.clientMode}
-                                    onChange={value => setEditingTicket({...editingTicket, client: value})}
-                                    onModeChange={mode => setEditingTicket({...editingTicket, clientMode: mode, client: mode === 'existing' ? '' : editingTicket.client})}
-                                />
+                                {renderClientField({
+                                    value: editingTicket.client,
+                                    mode: editingTicket.clientMode,
+                                    onChange: value => setEditingTicket({...editingTicket, client: value}),
+                                    onModeChange: mode => setEditingTicket({...editingTicket, clientMode: mode, client: mode === 'existing' ? '' : editingTicket.client})
+                                })}
                                 <div className="form-group">
                                     <label>Task Description *</label>
                                     <input value={editingTicket.task} onChange={e => setEditingTicket({...editingTicket, task: e.target.value})} />
@@ -6209,12 +6345,12 @@
                                     <div className="modal-title">New Invoice</div>
                                     <button className="close-btn" onClick={closeNewInvoiceModal}><Icon name="close" size={16} /></button>
                                 </div>
-                                <ClientField
-                                    value={newInvoice.client}
-                                    mode={newInvoice.clientMode}
-                                    onChange={value => setNewInvoice({...newInvoice, client: value})}
-                                    onModeChange={mode => setNewInvoice({...newInvoice, clientMode: mode, client: mode === 'existing' ? '' : newInvoice.client})}
-                                />
+                                {renderClientField({
+                                    value: newInvoice.client,
+                                    mode: newInvoice.clientMode,
+                                    onChange: value => setNewInvoice({...newInvoice, client: value}),
+                                    onModeChange: mode => setNewInvoice({...newInvoice, clientMode: mode, client: mode === 'existing' ? '' : newInvoice.client})
+                                })}
                                 <div className="form-group">
                                     <label>Invoice Date</label>
                                     <input type="date" value={newInvoice.invoiceDate || ''} onChange={e => setNewInvoice({...newInvoice, invoiceDate: e.target.value})} />
@@ -6339,12 +6475,12 @@
                                     <div className="modal-title">Edit Invoice</div>
                                     <button className="close-btn" onClick={() => setShowEditInvoice(false)}><Icon name="close" size={16} /></button>
                                 </div>
-                                <ClientField
-                                    value={editingInvoice.client}
-                                    mode={editingInvoice.clientMode}
-                                    onChange={value => setEditingInvoice({...editingInvoice, client: value})}
-                                    onModeChange={mode => setEditingInvoice({...editingInvoice, clientMode: mode, client: mode === 'existing' ? '' : editingInvoice.client})}
-                                />
+                                {renderClientField({
+                                    value: editingInvoice.client,
+                                    mode: editingInvoice.clientMode,
+                                    onChange: value => setEditingInvoice({...editingInvoice, client: value}),
+                                    onModeChange: mode => setEditingInvoice({...editingInvoice, clientMode: mode, client: mode === 'existing' ? '' : editingInvoice.client})
+                                })}
                                 <div className="form-group">
                                     <label>Invoice Date</label>
                                     <input type="date" value={editingInvoice.invoiceDate || ''} onChange={e => setEditingInvoice({...editingInvoice, invoiceDate: e.target.value})} />
